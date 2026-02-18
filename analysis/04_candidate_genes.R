@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 ######################################
-## Ranking of genes based on aggregated SHAP values to obtain candidate genes
+## EBEx Pipeline: Ranking of genes based on aggregated SHAP values to obtain candidate genes
 ## Iria Pose
 ## 2025
 ######################################

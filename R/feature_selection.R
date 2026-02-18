@@ -48,7 +48,7 @@ load_gene_list <- function(genes_list, base_path = "../COPD/feature_selection/")
 #' @return A character vector of selected gene names based on the specified procedure.
 #'
 #' @export
-run_feature_selection <- function(procedure, expression_data, target_var, threshold_value = NULL, disease_code = NULL, dea_genes = NULL, mrmr_genes = NULL, alternative_genes = NULL, directory_to_load = NULL, directory_to_save = NULL, mrmr_path = "./mrmr") {
+run_feature_selection <- function(procedure, expression_data, target_var, threshold_value = NULL, disease_code = NULL, dea_genes = NULL, mrmr_genes = NULL, alternative_genes = NULL, directory_to_load = NULL, directory_to_save = NULL, mrmr_path = NULL) {
   
   switch(procedure,
          "mrmr" = obtain_mrmr(expression_data, target_var, threshold_value, directory_to_save, mrmr_path),
@@ -87,7 +87,7 @@ run_feature_selection <- function(procedure, expression_data, target_var, thresh
 #' @export
 obtain_alternative_genes <- function(alternative_genes, directory_to_load, directory_to_save = NULL) {
 
-  cat("Obtaining alternative list of genes:", alternative_genes, "\n")
+  print_message("Obtaining alternative list of genes:", alternative_genes)
   file_path <- file.path(directory_to_load, paste0(alternative_genes, ".txt"))
   genes_list <- scan(file_path, what = "character", sep = ",")
   if (!is.null(directory_to_save)) {
@@ -115,11 +115,20 @@ obtain_alternative_genes <- function(alternative_genes, directory_to_load, direc
 #' @return A character vector of selected mRMR gene names.
 #'
 #' @export
-obtain_mrmr <- function(expression_data, target_var, threshold_value = NULL, directory_to_save = NULL, mrmr_path = "./mrmr") {
+obtain_mrmr <- function(expression_data, target_var, threshold_value = NULL, directory_to_save = NULL, mrmr_path = NULL) {
 
-  cat("Obtaining mrmr genes\n")
+  # Si el usuario no da una ruta, buscamos el binario dentro del paquete
+  if (is.null(mrmr_path)) {
+    mrmr_path <- system.file("bin/mrmr", package = "EBEx")
+  }
+  # Validación de seguridad: ¿Existe el archivo?
+  if (mrmr_path == "" || !file.exists(mrmr_path)) {
+    stop("Binary mRMR not found at: ", mrmr_path, 
+         ". Make sure the package is installed correctly.")
+  }
+  print_message("Obtaining mrmr genes")
   if(is.null(threshold_value)){
-    cat("Start of bootstrapping process\n")
+    print_message("Start of bootstrapping process")
     all_mrmr_scores_df <- run_mrmr_bootstrapping(expression_data, target_var, n_iterations = 100, directory_to_save = directory_to_save, mrmr_path = mrmr_path)
     threshold_value <- extract_score_threshold(all_mrmr_scores_df, "score")
   }
@@ -153,9 +162,9 @@ obtain_mrmr <- function(expression_data, target_var, threshold_value = NULL, dir
 #' @return A character vector of selected data-driven gene names.
 #'
 #' @export
-obtain_data_driven_genes <- function(dea_genes = NULL, mrmr_genes = NULL, expression_data, target_var, threshold_value = NULL, directory_to_load, directory_to_save = NULL, mrmr_path = "./mrmr"){
+obtain_data_driven_genes <- function(dea_genes = NULL, mrmr_genes = NULL, expression_data, target_var, threshold_value = NULL, directory_to_load, directory_to_save = NULL, mrmr_path = NULL){
 
-    cat("Obtaining data driven genes\n")
+    print_message("Obtaining data driven genes")
     if(is.null(mrmr_genes)) mrmr_genes <- obtain_mrmr(expression_data, target_var, threshold_value, directory_to_save, mrmr_path)
     if(is.null(dea_genes)){
       dea_genes <- scan(file.path(directory_to_load, "dea.txt"), what = "character", sep = ",")
@@ -189,7 +198,7 @@ obtain_data_driven_genes <- function(dea_genes = NULL, mrmr_genes = NULL, expres
 #' @return A character vector of combined gene names based on the specified operation.
 #'
 #' @export
-obtain_omnipath_combined <- function(expression_data, target_var, disease_code, threshold_value, dea_genes, mrmr_genes, directory_to_load, directory_to_save = NULL, operation = "intersection", mrmr_path = "./mrmr") {
+obtain_omnipath_combined <- function(expression_data, target_var, disease_code, threshold_value, dea_genes, mrmr_genes, directory_to_load, directory_to_save = NULL, operation = "intersection", mrmr_path = NULL) {
   disease_related <- obtain_disease_related_curated_genes(disease_code, directory_to_load, directory_to_save)
   data_driven <- obtain_data_driven_genes(dea_genes, mrmr_genes, expression_data, target_var, threshold_value, directory_to_load, directory_to_save, mrmr_path)
   
@@ -218,7 +227,7 @@ obtain_omnipath_combined <- function(expression_data, target_var, disease_code, 
 #' @export
 obtain_disease_related_entire_genes <- function(disease_code, directory_to_load, directory_to_save = NULL){
 
-    cat("Obtaining disease related entire genes\n")
+    print_message("Obtaining disease related entire genes")
     file_path <- file.path(directory_to_load, "disgenet_tables", paste0(disease_code, "_disease_gda_summary.tsv"))
     disgenet_entire <- utils::read.csv(file_path, sep ="\t")
     genes_list <- disgenet_entire$Gene
@@ -243,7 +252,7 @@ obtain_disease_related_entire_genes <- function(disease_code, directory_to_load,
 #'
 #' @export
 obtain_disease_related_curated_genes <- function(disease_code, directory_to_load, directory_to_save = NULL) {
-cat("Obtaining disease related curated genes\n")
+  print_message("Obtaining disease related curated genes")
   disgenet <- utils::read.csv(file.path(directory_to_load, "disgenet_curated_gene_disease_associations.tsv"), sep = "\t")
   gene_list <- disgenet[disgenet$diseaseId == disease_code, ]$geneSymbol
   if (!is.null(directory_to_save)) save_helper_txt(gene_list, "disease_related.txt", directory_to_save, "feature_selection")
@@ -266,7 +275,7 @@ cat("Obtaining disease related curated genes\n")
 #' @export
 obtain_omnipath_expansion <- function(genes, directory_to_save = NULL){
 
-    cat("Obtaining omnipath expansion genes\n")
+    print_message("Obtaining omnipath expansion genes")
     omnipath <- OmnipathR::import_all_interactions(organism = 9606, directed  = 'no') %>%
         dplyr::filter(.data$source_genesymbol %in% genes | .data$target_genesymbol %in% genes) %>%
         dplyr::filter(.data$curation_effort > 1)
@@ -302,7 +311,7 @@ extract_mrmr_features <- function(results) {
 }
 
 #' @keywords internal
-run_mrmr_bootstrapping <- function(expression_data, target_var, n_iterations = 10, directory_to_save = NULL, mrmr_path = "./mrmr") {
+run_mrmr_bootstrapping <- function(expression_data, target_var, n_iterations = 10, directory_to_save = NULL, mrmr_path = NULL) {
 
   all_results <- data.frame()
   for (i in 1:n_iterations) {

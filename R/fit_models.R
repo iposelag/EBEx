@@ -460,7 +460,7 @@ xgb_model <- function(data, target_var, folds, predictors, metrics, control, dir
 #' @return A list containing the results from each model, including training time, resampling results, and fitted model objects.
 #' 
 #' @export
-ML_models <- function(data, target_var, models_to_run = c("rf", "svm_r", "svm_p", "glm", "knn", "xgb"), directory_to_save = NULL) {
+ML_models <- function(data, target_var, models_to_run = c("rf", "svm_r", "svm_p", "glm", "knn", "xgb"), directory_to_save = NULL, verbose = FALSE) {
 
   set.seed(1234)
   # 1. Define the metrics to save for model evaluation
@@ -477,7 +477,7 @@ ML_models <- function(data, target_var, models_to_run = c("rf", "svm_r", "svm_p"
     save_helper_rda(expression_folds, "expression_folds", "folds_object.Rda", directory_to_save, "ML_models")
   }
   # 3. Set control parameters for Bayesian tuning
-  ctrl_bayes <- tune::control_bayes(no_improve = 15, verbose = TRUE, save_pred = TRUE, save_workflow = TRUE, seed = 1234)
+  ctrl_bayes <- tune::control_bayes(no_improve = 15, verbose = verbose, save_pred = TRUE, save_workflow = TRUE, seed = 1234)
   results <- list()
   # 4. Run the specified models and collect results
   if ("rf" %in% models_to_run) {

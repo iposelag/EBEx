@@ -12,7 +12,7 @@ obtain_data_driven_genes(
   threshold_value = NULL,
   directory_to_load,
   directory_to_save = NULL,
-  mrmr_path = "./mrmr"
+  mrmr_path = NULL
 )
 }
 \arguments{

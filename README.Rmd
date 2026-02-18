@@ -17,39 +17,25 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 <!-- badges: end -->
+ 
 
-The goal of EBEx is to ...
+EBEx is a R package that integrates an **E**nsemble-**B**ased **Ex**plainable AI pipeline for prioritising disease relevant genes from transcriptomic data, using Chronic Obstructive Pulmonary Disease (COPD) as a use case. The proposed pipeline allows the identification of COPD-associated genes that are less sensitive to disease heterogeneity than classical case-control approaches such as Differential Expression Analysis.
 
 ## Installation
 
-You can install the development version of EBEx from [GitHub](https://github.com/) with:
+You can install the development version of EBEx from [GitHub](https://github.com/) directly in R with:
 
 ``` r
-# install.packages("pak")
-pak::pak("iposelag/EBEx")
+if (!require("remotes")) install.packages("remotes")
+remotes::install_github("iposelag/EBEx")
 ```
 
-## Example
+## Study Overview
 
-This is a basic example which shows you how to solve a common problem:
+This work presents a computational pipeline built upon an ensemble of explainable AI methods. Framed as a patients vs. control predictive task, the approach identifies candidate markers, including genes with general effects on disease status as well as genes associated with specific patient subgroups. To maximise sensitivity, the pipeline integrates predictions from well-established ML classifiers--such as Random Forest (RF) and Support Vector Machines (SVM)--trained on multiple, complementary candidate gene lists. These lists comprise genes with strong signal-to-noise ratios derived from univariate analyses, including DEA, together with genes previously reported in the literature. Importantly, the initial lists are expanded to include additional genes acting within the same biological pathways, which may contribute to disease through shared molecular mechanisms. Model explainability scores are used to evaluate the contribution of each gene, enabling the prioritisation of those with the highest predictive value while deprioritising less informative candidates. By aggregating sample-specific explainability scores across classifiers and gene lists, the pipeline captures gene contributions from multiple methodological perspectives. This methodological diversity contributes decisively to the results, as it allows us in turn to identify COPD-relevant genes that, due to the molecular heterogeneity inherent to the disease, are usually neglected by most specific classifiers and gene lists.
 
-```{r example, eval = FALSE}
-library(EBEx)
-## basic example code
-```
+## Documentation
+Visit EBEx/docs/reference/index.html to check the package documentation and tutorials.
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
+## Vingettes
+Comming soon!

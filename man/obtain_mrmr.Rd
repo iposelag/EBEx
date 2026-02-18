@@ -9,7 +9,7 @@ obtain_mrmr(
   target_var,
   threshold_value = NULL,
   directory_to_save = NULL,
-  mrmr_path = "./mrmr"
+  mrmr_path = NULL
 )
 }
 \arguments{

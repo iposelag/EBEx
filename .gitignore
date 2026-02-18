@@ -11,6 +11,8 @@
 # Carpetas de datos y resultados
 test/
 omnipathr-log/
+Slurm/
+docs/
 
 # Extensiones de archivos binarios pesados
 *.Rda
@@ -19,3 +21,5 @@ omnipathr-log/
 *.pdf
 *.csv
 
+# Binarios
+.mrmr

@@ -1,34 +1,41 @@
 
 #!/usr/bin/env Rscript
 ######################################
-## Ranking of genes based on aggregated SHAP values
+## ML training and explainability for candidate gene list
 ## Iria Pose
 ## 2025
 ######################################
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
-# Required Libraries
+# 0. Setup & libraries
 library(devtools)
 devtools::load_all()
 devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(dplyr)
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 1. CONFIGURATION
+# Parameters
 set.seed(1234)
 ini <- Sys.time()
-
-test_dir <- "test"
+procedure <- "alternative"
 target_var <- "dis_condition"
-test_output <- file.path(test_dir, "results_data_driven")
-ml_models_to_run_vector <- c("rf")
-# ml_models_to_run_vector <- c("rf", "knn", "svm_r", "svm_p", "glm", "xgb")
-
-if (!dir.exists(test_output)) dir.create(test_output, recursive = TRUE)
+threshold_value <- NULL
+disease_code <- NULL
+dea_genes <- NULL
+mrmr_genes <- NULL
+alternative_genes <- "candidate"
+# Relative paths
+preprocessing_dir <- "test/analysis/preprocessing"
+features_dir <- "test/feature_selection"
+output_dir <- "test/plots"
+ml_models_dir <- paste0("test/results_", alternative_genes)
+ml_models_to_run_vector <- c("rf", "knn", "svm_r", "svm_p", "glm", "xgb")
+if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
-# # 2. PARALELIZACIÓN (Tidymodels lo detecta automáticamente)
+# # 2. PARALELIZACIÓN PENDIENTE!!!
 # # Usaremos los cores asignados por Slurm
 # num_cores <- as.numeric(Sys.getenv("SLURM_CPUS_PER_TASK", 1))
 # cl <- makePSOCKcluster(num_cores)
@@ -37,47 +44,43 @@ if (!dir.exists(test_output)) dir.create(test_output, recursive = TRUE)
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 2. PREPROCESSING: Split
-
-# Create train and test sets
-cat("Splitting data into train and test sets...\n")
-split_data <- obtain_split_data(directory_to_load = file.path(test_dir, "input_data"),
-                                file_name = "expression",
-                                target_var = target_var,
-                                directory_to_save = test_output)
-
-expression_train <- split_data$train
-expression_test <- split_data$test
-
-# Save training samples
-train_samples <- rownames(expression_train)
-write.csv(train_samples, file = file.path(test_output, "train_samples.csv"), row.names = FALSE, col.names = "sample_id")
+# 2.1. Load train and test sets
+print_message("Loading train and test sets...")
+load(file.path(preprocessing_dir, "expression_train.Rda"))
+load(file.path(preprocessing_dir, "expression_test.Rda"))
+print_message("________________________________")
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 3. FEATURE SELECTION
 genes_list <- run_feature_selection(
-  procedure = "alternative",
-  alternative_genes = "data_driven",
-  directory_to_load = file.path(test_dir, "input_data"),
-  directory_to_save = test_dir
+  procedure = procedure,
+  expression_data = expression_train,
+  target_var = target_var,
+  threshold_value = threshold_value,
+  disease_code = disease_code,
+  dea_genes = dea_genes,
+  mrmr_genes  = mrmr_genes,
+  alternative_genes = alternative_genes,
+  directory_to_load = features_dir,
+  directory_to_save = features_dir
 )
-
 # Filter training data
 col_selection <- c(target_var, genes_list)
 expression_train <- expression_train[, colnames(expression_train) %in% col_selection]
+print_message("________________________________")
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 4. CLASSIFICATION PERFORMANCE
 # 4.1 Run ML models
-cat("Running ML models on candidate gene list...\n")
+print_message("Running ML models on candidate gene list...")
 results <- ML_models(
   data = expression_train,
   target_var = target_var,
   models_to_run = ml_models_to_run_vector,
-  directory_to_save = test_output
+  directory_to_save = ml_models_dir
 )
-
 # 4.2 Extract results
-cat("Extracting model results...\n")
+print_message("Extracting model results...")
 models_results <- extract_models_results(
   models_to_run = ml_models_to_run_vector,
   results_models = results,
@@ -85,51 +88,49 @@ models_results <- extract_models_results(
   expression_test = expression_test,
   target_var = target_var
 )
-
 # Save list of results
-saveRDS(models_results, file = file.path(test_output,"models_results.rds"))
-
+saveRDS(models_results, file = file.path(ml_models_dir,"models_results.rds"))
 # 4.3 Process data for plotting
-cat("Processing results for plotting...\n")
+print_message("Processing results for plotting...")
 models_results_cv_df <- process_cross_validation_metrics(
-  models_results = models_results,
+  results_models = models_results,
   classifiers = ml_models_to_run_vector
 )
 models_results_test_df <- process_test_metrics(
-  models_results = models_results,
+  results_models = models_results,
   classifiers = ml_models_to_run_vector
 )
 models_results_cv_df$classifier <- rename_classifier(models_results_cv_df$classifier)
 models_results_cv_df$input_list <- rep("Candidate List", nrow(models_results_cv_df))
 models_results_test_df$classifier <- rename_classifier(models_results_test_df$classifier)
 models_results_test_df$input_list <- rep("Candidate List", nrow(models_results_test_df))
-
-# Plot classification performance
+# 4.4. Plot classification performance
 # Define minmax and normMCC for radar charts
 minmax <- c(0.5,0.9,0.1)
 metric <- "normMCC"
 # Plot Test
-cat("Plotting classification performance radar charts...\n")
+print_message("Plotting classification performance radar charts...")
 data_for_plot <- prepare_data_for_radarchart(models_results_test_df, metric, "estimate", minmax[1], minmax[2])
-plot_radarchart(data_for_plot, metric, plot_name = "radarchart_test_candidate", test_output, minmax[1], minmax[2], minmax[3])
+plot_radarchart(data_for_plot, metric, plot_name = "radarchart_test_candidate", output_dir, minmax[1], minmax[2], minmax[3])
 # Cross validation
 data_for_plot <- prepare_data_for_radarchart(models_results_cv_df, metric, "mean", minmax[1], minmax[2])
-plot_radarchart(data_for_plot, metric, plot_name = "radarchart_cross_validation_candidate", test_output, minmax[1], minmax[2], minmax[3])
+plot_radarchart(data_for_plot, metric, plot_name = "radarchart_cross_validation_candidate", output_dir, minmax[1], minmax[2], minmax[3])
+print_message("________________________________")
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 5. EXPLAINABILITY
-cat("Calculating SHAP explainability...\n")
-shap_results <- calculate_all_shap(ml_models_to_run = ml_models_to_run_vector,
-                                   results_models = results,
-                                   expression_data = expression_train,
-                                   target_var = target_var,
-                                   directory_to_save = test_output)
-
-saveRDS(shap_results, file = file.path(test_output,"shap_results.rds"))
+# print_message("Calculating SHAP explainability...")
+# shap_results <- calculate_all_shap(ml_models_to_run = ml_models_to_run_vector,
+#                                    results_models = results,
+#                                    expression_data = expression_train,
+#                                    target_var = target_var,
+#                                    directory_to_save = ml_models_dir)
+# saveRDS(shap_results, file = file.path(ml_models_dir,"shap_results.rds"))
+# print_message("________________________________")
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
-# END
+# 6. FINISH
 stopCluster(cl)
 fin <- Sys.time()
-cat("Pipeline completed!\n")
-cat("Total time:", fin - ini, "\n")
+print_message("Pipeline completed!")
+print_message("Total time:", fin - ini)

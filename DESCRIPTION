@@ -1,9 +1,9 @@
 Package: EBEx
-Title: What the Package Does (One Line, Title Case)
+Title: An Ensemble-Based Explainable Framework for Gene Calling in Heterogeneous Diseases
 Version: 0.0.0.9000
 Authors@R: 
     person("Iria", "Pose Lagoa", , "iria.poselagoa@bsc.es", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+Description: EBEx is a R package that integrates an Ensemble-Based Explainable AI pipeline for prioritising disease relevant genes from transcriptomic data, using Chronic Obstructive Pulmonary Disease (COPD) as a use case.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -27,3 +27,8 @@ Imports:
     tune,
     workflows,
     yardstick
+URL: https://iposelag.github.io/EBEx/
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -8,7 +8,8 @@ ML_models(
   data,
   target_var,
   models_to_run = c("rf", "svm_r", "svm_p", "glm", "knn", "xgb"),
-  directory_to_save = NULL
+  directory_to_save = NULL,
+  verbose = FALSE
 )
 }
 \arguments{

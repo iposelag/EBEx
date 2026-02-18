@@ -38,7 +38,7 @@ obtain_split_data <- function(directory_to_load, file_name, target_var, director
   }
   print_message("Class imbalance: train set", verbose = verbose)
   print_message(round(prop.table(table(expression_train[[target_var]])) * 100, 3), verbose = verbose)
-  print_message("\nClass imbalance: test set", verbose = verbose)
+  print_message("Class imbalance: test set", verbose = verbose)
   print_message(round(prop.table(table(expression_test[[target_var]])) * 100, 3), verbose = verbose)
   
   return(list(train = expression_train, test = expression_test))

@@ -15,7 +15,7 @@ run_feature_selection(
   alternative_genes = NULL,
   directory_to_load = NULL,
   directory_to_save = NULL,
-  mrmr_path = "./mrmr"
+  mrmr_path = NULL
 )
 }
 \arguments{

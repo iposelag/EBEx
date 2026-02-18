@@ -14,7 +14,7 @@ obtain_omnipath_combined(
   directory_to_load,
   directory_to_save = NULL,
   operation = "intersection",
-  mrmr_path = "./mrmr"
+  mrmr_path = NULL
 )
 }
 \arguments{
