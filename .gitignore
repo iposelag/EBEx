@@ -1,0 +1,21 @@
+# RStudio files
+.Rproj.user
+.Rhistory
+.Rdata
+.Ruserdata
+.RData
+.httr-oauth
+.DS_Store
+.quarto
+
+# Carpetas de datos y resultados
+test/
+omnipathr-log/
+
+# Extensiones de archivos binarios pesados
+*.Rda
+*.rds
+*.gct.gz
+*.pdf
+*.csv
+
