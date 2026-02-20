@@ -9,6 +9,7 @@ Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports: 
+    broom,
     ComplexHeatmap,
     DALEX,
     DALEXtra,
@@ -21,9 +22,14 @@ Imports:
     magrittr,
     OmnipathR,
     parsnip,
+    proxy,
+    purrr,
     recipes,
     rsample,
+    stringr,
     themis,
+    tibble,
+    tidyr,
     tune,
     workflows,
     yardstick
