@@ -8,8 +8,12 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
+biocViews: Software, Transcriptomics, Classification
 Imports: 
+    Biobase,
     broom,
+    bundle,
+    circlize,
     ComplexHeatmap,
     DALEX,
     DALEXtra,
@@ -19,19 +23,28 @@ Imports:
     ggExtra,
     ggplot2,
     ggrepel,
+    glmnet,
+    kernlab,
+    kknn,
+    limma,
     magrittr,
     OmnipathR,
     parsnip,
     proxy,
     purrr,
+    ranger,
     recipes,
     rsample,
+    stats,
     stringr,
+    sva,
     themis,
     tibble,
     tidyr,
     tune,
+    utils,
     workflows,
+    xgboost,
     yardstick
 URL: https://iposelag.github.io/EBEx/
 Suggests: 
