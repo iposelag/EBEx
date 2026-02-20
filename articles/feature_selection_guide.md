@@ -1,0 +1,81 @@
+# Step 01: Feature Selection
+
+``` r
+library(EBEx)
+#> Warning: replacing previous import 'proxy::dist' by 'stats::dist' when loading
+#> 'EBEx'
+```
+
+## Introduction
+
+The first step in the EBEx pipeline is to identify potential genes from
+multiple sources. In this example we show how to obtain the Data-Driven
+and Disease-Related genes. First, we will define some global variables
+and relative paths:
+
+``` r
+# Parameters
+target_var <- "dis_condition"
+disease_code <- "C0024117"
+# Relative paths
+base_dir <- "../test"
+raw_dir <- file.path(base_dir, "raw_data")
+output_dir <- file.path(base_dir, "feature_selection")
+```
+
+To get any feature selection list, we need the train expression matrix
+and the target variable. Therefore, the first step is to obtain the
+train and test sets:
+
+``` r
+# Extract train and test sets
+split_data <- obtain_split_data(directory_to_load = raw_dir,
+                                file_name = "expression",
+                                target_var = target_var,
+                                directory_to_save = output_dir)
+expression_train <- split_data$train
+expression_test <- split_data$test
+```
+
+### Example 1: Data-Driven Selection
+
+For obtaining the Data-Driven list we need the Differentially Expressed
+genes (DEA genes; saved as dea.txt) and the mRMR genes. We have already
+computed the DEA genes; they should be saved in a dea.txt file with one
+gene per line. For obtaining the mRMR genes, we need the ./mrmr binary
+program and the selected threshold (a = 0.031 in this case).
+
+``` r
+# This code block requires the mRMR binary
+genes_mrmr <- run_feature_selection(
+  procedure = "data_driven",
+  expression_data = expression_train,
+  threshold_value = 0.031,
+  target_var = target_var,
+  dea_genes = NULL,
+  mrmr_genes = NULL,
+  directory_to_load = output_dir,
+  directory_to_save = output_dir
+)
+print_message(genes_mrmr)
+```
+
+### Example 2: Disease-Related Curated Genes
+
+For obtaining the Disease-Related genes, we use the DisGeNet database.
+For doing that, we have downloaded the disease-associated genes from
+curated resources and we can extract genes already associated with a
+disease code (COPD: C0024117).
+
+``` r
+# This code block requires having the DisGeNet database downloaded and knowing the disease code
+genes_disgenet <- run_feature_selection(
+  procedure = "disease_related",
+  target_var = target_var,
+  disease_code = disease_code,
+  expression_data = expression_train,
+  directory_to_load = raw_dir,
+  directory_to_save = output_dir
+)
+print_message(genes_disgenet)
+```

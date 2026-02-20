@@ -1,0 +1,116 @@
+# Package index
+
+## All functions
+
+- [`ML_models()`](https://iposelag.github.io/EBEx/reference/ML_models.md)
+  : Run ML Pipeline
+- [`aggregate_gene_sample_matrix()`](https://iposelag.github.io/EBEx/reference/aggregate_gene_sample_matrix.md)
+  : Generate Gene-Sample Matrix
+- [`aggregate_genes()`](https://iposelag.github.io/EBEx/reference/aggregate_genes.md)
+  : Generate Gene-Level Aggregation
+- [`barplot_feature_selection()`](https://iposelag.github.io/EBEx/reference/barplot_feature_selection.md)
+  : Plot Barplot of input lists
+- [`calculate_all_shap()`](https://iposelag.github.io/EBEx/reference/calculate_all_shap.md)
+  : Calculate SHAP values for all ML models
+- [`calculate_sample_clustering()`](https://iposelag.github.io/EBEx/reference/calculate_sample_clustering.md)
+  : Perform Sample Clustering
+- [`calculate_variable_importance_batch()`](https://iposelag.github.io/EBEx/reference/calculate_variable_importance_batch.md)
+  : Calculate Variable Importance for a Batch of Samples
+- [`compute_density_analysis()`](https://iposelag.github.io/EBEx/reference/compute_density_analysis.md)
+  : Compute Density and Derivatives for Ranking
+- [`dea_analysis()`](https://iposelag.github.io/EBEx/reference/dea_analysis.md)
+  : Post-DEA Analysis and Diagnostics
+- [`extract_models_results()`](https://iposelag.github.io/EBEx/reference/extract_models_results.md)
+  : Extract models results (cross-validation, train, test and timing)
+- [`filter_model_performance()`](https://iposelag.github.io/EBEx/reference/filter_model_performance.md)
+  : Filter best scenarios (input list + classifier) based on performance
+  metrics
+- [`generate_shap_contributions()`](https://iposelag.github.io/EBEx/reference/generate_shap_contributions.md)
+  : Generate SHAP Contributions for a Single Sample
+- [`get_candidate_genes()`](https://iposelag.github.io/EBEx/reference/get_candidate_genes.md)
+  : Select Candidate Genes by Threshold
+- [`get_enrichment_logical_matrix()`](https://iposelag.github.io/EBEx/reference/get_enrichment_logical_matrix.md)
+  : Create Enrichment Logical Matrix
+- [`get_enrichment_matrix()`](https://iposelag.github.io/EBEx/reference/get_enrichment_matrix.md)
+  : Create Enrichment Matrix padjusted values
+- [`glm_binary_model()`](https://iposelag.github.io/EBEx/reference/glm_binary_model.md)
+  : GLM Binary Model
+- [`glm_multiclass_model()`](https://iposelag.github.io/EBEx/reference/glm_multiclass_model.md)
+  : GLM Multiclass Model
+- [`knn_model()`](https://iposelag.github.io/EBEx/reference/knn_model.md)
+  : KNN Model
+- [`load_gene_list()`](https://iposelag.github.io/EBEx/reference/load_gene_list.md)
+  : Load a gene list from a file
+- [`normalize_shap_values()`](https://iposelag.github.io/EBEx/reference/normalize_shap_values.md)
+  : Normalize SHAP Values
+- [`obtain_alternative_genes()`](https://iposelag.github.io/EBEx/reference/obtain_alternative_genes.md)
+  : Obtain alternative selection of genes
+- [`obtain_data_driven_genes()`](https://iposelag.github.io/EBEx/reference/obtain_data_driven_genes.md)
+  : Obtain Data Driven Genes (DEA + mRMR)
+- [`obtain_disease_related_curated_genes()`](https://iposelag.github.io/EBEx/reference/obtain_disease_related_curated_genes.md)
+  : Obtain curated disease genes
+- [`obtain_disease_related_entire_genes()`](https://iposelag.github.io/EBEx/reference/obtain_disease_related_entire_genes.md)
+  : Obtain disease-related entire genes
+- [`obtain_mrmr()`](https://iposelag.github.io/EBEx/reference/obtain_mrmr.md)
+  : Obtain mRMR genes
+- [`obtain_omnipath_combined()`](https://iposelag.github.io/EBEx/reference/obtain_omnipath_combined.md)
+  : Combined Omnipath Expansion (Intersection/Union)
+- [`obtain_omnipath_expansion()`](https://iposelag.github.io/EBEx/reference/obtain_omnipath_expansion.md)
+  : Obtain Omnipath expansion
+- [`obtain_split_data()`](https://iposelag.github.io/EBEx/reference/obtain_split_data.md)
+  : Split Data into Training and Test Sets
+- [`perform_pheno_test()`](https://iposelag.github.io/EBEx/reference/perform_pheno_test.md)
+  : Perform Statistical Test for Gene-Phenotype Association
+- [`plot_dea_candidates()`](https://iposelag.github.io/EBEx/reference/plot_dea_candidates.md)
+  : Plot DEA Candidate Genes
+- [`plot_density_diagnostic()`](https://iposelag.github.io/EBEx/reference/plot_density_diagnostic.md)
+  : Plot Density Diagnostic for Threshold Selection
+- [`plot_enrichment_dotplot()`](https://iposelag.github.io/EBEx/reference/plot_enrichment_dotplot.md)
+  : Plot Functional Enrichment Dotplot
+- [`plot_gtex_heatmap()`](https://iposelag.github.io/EBEx/reference/plot_gtex_heatmap.md)
+  : Plot GTEx Expression Heatmap
+- [`plot_mclust_diagnostic()`](https://iposelag.github.io/EBEx/reference/plot_mclust_diagnostic.md)
+  : Plot Mclust Diagnostics
+- [`plot_radarchart()`](https://iposelag.github.io/EBEx/reference/plot_radarchart.md)
+  : Plot Radar Chart
+- [`plot_shap_occurrence()`](https://iposelag.github.io/EBEx/reference/plot_shap_occurrence.md)
+  : Plot SHAP Magnitude vs Occurrence
+- [`plot_summary_barplot()`](https://iposelag.github.io/EBEx/reference/plot_summary_barplot.md)
+  : Plot Summary Barplot of Classifier Performance
+- [`plot_time_vs_genes()`](https://iposelag.github.io/EBEx/reference/plot_time_vs_genes.md)
+  : Plot Computation Time vs Gene List Size
+- [`prepare_data_for_radarchart()`](https://iposelag.github.io/EBEx/reference/prepare_data_for_radarchart.md)
+  : Prepare data for Radar Chart
+- [`prepare_summary_barplot_data()`](https://iposelag.github.io/EBEx/reference/prepare_summary_barplot_data.md)
+  : Prepare data for Summary Barplot
+- [`print_message()`](https://iposelag.github.io/EBEx/reference/print_message.md)
+  : Print Timestamped Messages
+- [`process_cross_validation_metrics()`](https://iposelag.github.io/EBEx/reference/process_cross_validation_metrics.md)
+  : Process Cross-Validation Metrics from Results List converts the
+  nested list of cross-validation metrics into a long-format data frame
+- [`rename_input_classifier()`](https://iposelag.github.io/EBEx/reference/rename_input_classifier.md)
+  : Rename Composite Input-Classifier Names
+- [`rf_model()`](https://iposelag.github.io/EBEx/reference/rf_model.md)
+  : Random Forest Model Training
+- [`run_aggregation_pipeline()`](https://iposelag.github.io/EBEx/reference/run_aggregation_pipeline.md)
+  : Full Aggregation Pipeline (Example)
+- [`run_cluster_enrichment()`](https://iposelag.github.io/EBEx/reference/run_cluster_enrichment.md)
+  : Enrichment Analysis of Clusters vs Phenotypes
+- [`run_dea_limma()`](https://iposelag.github.io/EBEx/reference/run_dea_limma.md)
+  : Run Differential Expression Analysis using Limma
+- [`run_feature_selection()`](https://iposelag.github.io/EBEx/reference/run_feature_selection.md)
+  : Main Function for Feature Selection
+- [`run_functional_enrichment()`](https://iposelag.github.io/EBEx/reference/run_functional_enrichment.md)
+  : Run Functional Enrichment using EnrichR
+- [`run_mclust_analysis()`](https://iposelag.github.io/EBEx/reference/run_mclust_analysis.md)
+  : Run Mclust Analysis for Gene Ranking
+- [`run_phenotype_enrichment()`](https://iposelag.github.io/EBEx/reference/run_phenotype_enrichment.md)
+  : Run Full Phenotype Enrichment Analysis
+- [`select_genes_mclust()`](https://iposelag.github.io/EBEx/reference/select_genes_mclust.md)
+  : Select Candidate Genes based on Mclust Clusters
+- [`svm_p_model()`](https://iposelag.github.io/EBEx/reference/svm_p_model.md)
+  : SVM Polynomial Model
+- [`svm_r_model()`](https://iposelag.github.io/EBEx/reference/svm_r_model.md)
+  : SVM Radial Model
+- [`xgb_model()`](https://iposelag.github.io/EBEx/reference/xgb_model.md)
+  : XGBoost Model
