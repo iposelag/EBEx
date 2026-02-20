@@ -113,7 +113,7 @@ calculate_all_shap <- function(ml_models_to_run, results_models, expression_data
   for(classif in ml_models_to_run) {
     # 1.1 Rename classifiers by using the utility function to get the pretty name
     classif_pretty_name <- rename_classifier(classif)
-    cat("Calculating SHAP for model:", classif_pretty_name, "\n")
+    print_message("Calculating SHAP for model:", classif_pretty_name)
     # 1.2 Get the fitted model and calculate SHAP values
     fit <- results_models[[classif]]$fit
     target_var_numeric <- as.numeric(expression_data[[target_var]]) - 1

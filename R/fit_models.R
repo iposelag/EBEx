@@ -482,15 +482,15 @@ ML_models <- function(data, target_var, models_to_run = c("rf", "svm_r", "svm_p"
   # 4. Run the specified models and collect results
   if ("rf" %in% models_to_run) {
     results$rf <- rf_model(data, target_var, expression_folds, expression_predictors, metrics_to_save, ctrl_bayes, directory_to_save)
-    cat(rename_classifier("rf"), "done\n")
+    print_message(rename_classifier("rf"), "done")
   }
   if ("svm_r" %in% models_to_run) {
     results$svm_r <- svm_r_model(data, target_var, expression_folds, metrics_to_save, ctrl_bayes, directory_to_save)
-    cat(rename_classifier("svm_r"), "done\n")
+    print_message(rename_classifier("svm_r"), "done")
   }
   if ("svm_p" %in% models_to_run) {
     results$svm_p <- svm_p_model(data, target_var, expression_folds, metrics_to_save, ctrl_bayes, directory_to_save)
-    cat(rename_classifier("svm_p"), "done\n")
+    print_message(rename_classifier("svm_p"), "done")
   }
   if ("glm" %in% models_to_run) {
     if(length(levels(data[[target_var]])) == 2) {
@@ -498,15 +498,15 @@ ML_models <- function(data, target_var, models_to_run = c("rf", "svm_r", "svm_p"
     } else {
       results$glm <- glm_multiclass_model(data, target_var, expression_folds, metrics_to_save, ctrl_bayes, directory_to_save)
     }
-    cat(rename_classifier("glm"), "done\n")
+    print_message(rename_classifier("glm"), "done")
   }
   if ("knn" %in% models_to_run) {
     results$knn <- knn_model(data, target_var, expression_folds, metrics_to_save, ctrl_bayes, directory_to_save)
-    cat(rename_classifier("knn"), "done\n")
+    print_message(rename_classifier("knn"), "done")
   }
   if ("xgb" %in% models_to_run) {
     results$xgb <- xgb_model(data, target_var, expression_folds, expression_predictors, metrics_to_save, ctrl_bayes, directory_to_save)
-    cat(rename_classifier("xgb"), "done\n")
+    print_message(rename_classifier("xgb"), "done")
   }
 
   return(results)

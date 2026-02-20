@@ -22,15 +22,15 @@ run_mclust_analysis <- function(data, column = "aggregated_max", G = 1:9) {
   X <- data[[column]]
   if (is.null(X)) stop("Column not found in data.")
   # 2. Fit Mclust model and compute BIC and ICL
-  cat("Computing BIC and fitting Mclust model...\n")
+  print_message("Computing BIC and fitting Mclust model...")
   BIC <- mclust::mclustBIC(X, G = G)
   mod1 <- mclust::Mclust(X, x = BIC, G = G)
   # 3. Compute ICL for the same model
-  cat("Computing ICL...\n")
+  print_message("Computing ICL...")
   ICL <- mclust::mclustICL(X, G = G)
   # 4. Summary output for the console
   print(summary(mod1))
-  cat("\nCluster sizes:\n")
+  print_message("Cluster sizes:")
   print(table(mod1$classification))
 
   return(list(
@@ -86,7 +86,7 @@ plot_mclust_diagnostic <- function(mclust_list, sel_groups = NULL, output_file =
   # Close PDF device if it was opened
   if (!is.null(output_file)) {
     grDevices::dev.off()
-    cat("Mclust diagnostic saved to:", output_file, "\n")
+    print_message("Mclust diagnostic saved to:", output_fil)
   }
 
   return(invisible(NULL))
@@ -117,8 +117,8 @@ select_genes_mclust <- function(mclust_list, sel_groups) {
   # Filter genes
   candidates <- data[X >= threshold, ]
   candidates <- candidates[order(-candidates[[mclust_list$column_used]]), ]
-  cat(sprintf("Threshold defined at: %.6f\n", threshold))
-  cat(sprintf("Selected %d genes from clusters: %s\n", 
+  print_message(sprintf("Threshold defined at: %.6f\n", threshold))
+  print_message(sprintf("Selected %d genes from clusters: %s\n", 
               nrow(candidates), paste(sel_groups, collapse = ", ")))
   
   return(candidates)

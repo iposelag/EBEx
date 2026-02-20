@@ -99,7 +99,7 @@ plot_density_diagnostic <- function(analysis_list, suggested_threshold = NULL, o
     # Create the directory if it doesn't exist
     if (!dir.exists(dirname(output_file))) dir.create(dirname(output_file), recursive = TRUE)
     ggplot2::ggsave(filename = output_file, plot = combined_plot, width = 8, height = 10)
-    cat("Plot saved to:", output_file, "\n")
+    print_message("Plot saved to:", output_file)
   }
   # Always display the plot on the screen
   grid::grid.draw(combined_plot)
@@ -128,7 +128,7 @@ get_candidate_genes <- function(analysis_list, threshold) {
   sgenes <- data[data[[col]] > threshold, ]
   sgenes <- sgenes[order(-sgenes[[col]]), ]
   perc <- (nrow(sgenes) / nrow(data)) * 100
-  cat(sprintf("Selected %d genes (%.2f%% of total genes).\n", nrow(sgenes), perc))
+  print_message(sprintf("Selected %d genes (%.2f%% of total genes).\n", nrow(sgenes), perc))
   
   return(sgenes)
 }

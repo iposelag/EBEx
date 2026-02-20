@@ -7,10 +7,7 @@
 
 ## --------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-library(devtools)
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(dplyr)
 library(UpSetR)
 
@@ -19,7 +16,7 @@ library(UpSetR)
 candidate_results_dir <- "test/candidate_genes"
 output_dir <- "test/plots"
 classifiers <- c("rf", "svm_r", "svm_p", "glm", "knn", "xgb")
-input <- "data_driven"
+input <- "disease_related"
 if(input != "disease_related"){
   input_lists <- c("data_driven",
                    "dea",
@@ -28,8 +25,8 @@ if(input != "disease_related"){
                    "guildify_data_driven")
 }else{
   input_lists <- c("disease_related",
-                       "disease_related_entire_list",
-                       "omnipath_disease_related",
+                      "disease_related_entire_list",
+                      "omnipath_disease_related",
                        "guildify_disease_related")}
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
@@ -82,14 +79,14 @@ upset_data <- fromList(gene_list)
 colnames(upset_data) <- rename_input_classifier(colnames(upset_data))
 
 # Open a PDF device
-pdf(file.path(output_dir, paste0("upset_plot_top_shap_",input,"_genes.pdf")), width = 16, height = 8)
+pdf(file.path(output_dir, paste0("upset_plot_top_shap_",input,"_genes.pdf")), width = 22, height = 12)
 upset(
-  upset_data, 
+  upset_data,
   sets = colnames(upset_data), # All columns except the "gene" column
   nintersects = NA,            # Display all intersections
   keep.order = TRUE,            # Keep the order of sets as in the data
   order.by = "freq",           # Order intersections by frequency
   text.scale = c(2, 2, 2, 2, 2, 2), # Scale text size (axes, labels, etc.)
-  mb.ratio = c(0.43, 0.55)          # Adjust the ratio of the main bar plot to the set size plot (default is c(0.5, 0.5))
+  mb.ratio = c(0.5, 0.5)          # Adjust the ratio of the main bar plot to the set size plot (default is c(0.5, 0.5))
 )
 dev.off()

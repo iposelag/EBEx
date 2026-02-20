@@ -2,7 +2,7 @@
 title: "Step 01: Feature Selection"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{feature_selection_guide}
+  %\VignetteIndexEntry{Step 01: Feature Selection}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -70,7 +70,6 @@ genes_disgenet <- run_feature_selection(
   target_var = target_var,
   disease_code = disease_code,
   expression_data = expression_train,
-  target_var = target_var,
   directory_to_load = raw_dir,
   directory_to_save = output_dir
 )

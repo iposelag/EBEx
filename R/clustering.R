@@ -21,7 +21,7 @@ NULL
 calculate_sample_clustering <- function(mat, method = "cosine", k = 5) {
 
   set.seed(1234)
-  cat("Computing", method, "distance...\n")
+  print_message("Computing", method, "distance...")
   if (method == "cosine") {
     d <- proxy::dist(t(mat), method = "cosine")
   } else {
@@ -65,11 +65,11 @@ run_cluster_enrichment <- function(cluster_vec, phenotype_data) {
     # 4.1 Skip clusters with less than 3 samples
     n_samples <- cluster_sizes[as.character(cl_id)]
     if (n_samples < 3) {
-      cat("Skipping Cluster:", cl_id, "(only", n_samples, "samples)\n")
+      print_message("Skipping Cluster:", cl_id, "(only", n_samples, "samples)")
       next
     }
     # 4.2. Processing Cluster
-    cat("Processing Cluster:", cl_id, "\n")
+    print_message("Processing Cluster:", cl_id)
     # Create binary variable "This Cluster vs The Rest"
     current_pheno <- pdata_sub %>%
       dplyr::mutate(target_cluster = ifelse(cluster_sub == cl_id, 1, 0))

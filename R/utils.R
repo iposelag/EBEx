@@ -35,7 +35,7 @@ save_helper_rda <- function(data_obj, obj_name, filename, directory, subfolder =
 #' @keywords internal
 save_helper_multi_rda <- function(obj_list, name_list, filename, directory, subfolder = "") {
 
-  cat("Saving multiple .Rda objects to", file.path(directory, subfolder, filename), "...")
+  print_message("Saving multiple .Rda objects to", file.path(directory, subfolder, filename), "...", verbose = verbose)
   out_dir <- file.path(directory, subfolder)
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
   # Create a temporary environment
@@ -174,7 +174,7 @@ rename_input_classifier <- function(x, sep = "_") {
 #' Process Cross-Validation Metrics from Results List
 #' converts the nested list of cross-validation metrics into a long-format data frame
 #'
-#' @keywords internal
+#' @keywords external
 process_cross_validation_metrics <- function(results_models, classifiers) {
 
   all_metrics <- purrr::map_dfr(classifiers, function(cl) {
@@ -256,7 +256,7 @@ print_message <- function(..., verbose = getOption("EBEx.verbose", default = TRU
   })
   
   message_text <- paste(unlist(args), collapse = " ")
-  cat(format(Sys.time(), "[%Y-%m-%d %H:%M:%S]"), ":    ", message_text, "\n")
+  print_message(format(Sys.time(), "[%Y-%m-%d %H:%M:%S]"), ":    ", message_text)
   
   return(invisible(NULL))
 }

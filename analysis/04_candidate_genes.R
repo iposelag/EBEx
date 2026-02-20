@@ -7,9 +7,7 @@
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(purrr)
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
@@ -36,16 +34,16 @@ results_list <- purrr::map(input_lists, function(name) {
 results_shap <- purrr::map(input_lists, function(name) {
   readRDS(file.path(directory_to_load, paste0("results_", name), "results_shap.rds"))
 }) %>% purrr::set_names(input_lists)
-print_message("________________________________\n")
+print_message("________________________________")
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 3. AGGREGATION
 print_message("Running aggregation pipeline...")
 aggregated_data <- run_aggregation_pipeline(results_list, results_shap, threshold = 0.75, candidate_results_dir = output_dir)
 # Save intermediate aggregation summary
-write.csv(aggregated_data$summary, 
+write.csv(aggregated_data$summary,
           file.path(output_dir, "aggregated_shap_summary.csv"), row.names = FALSE)
-write.csv(aggregated_data$matrix, 
+write.csv(aggregated_data$matrix,
           file.path(output_dir, "aggregated_shap_matrix.csv"), row.names = FALSE)
 print_message("________________________________\n")
 
@@ -58,7 +56,7 @@ pdf(file.path(output_dir, "ranking_density_diagnostic.pdf"), width = 10, height 
 plot_density_diagnostic(density_analysis, density_threshold)
 dev.off()
 final_genes_density <- get_candidate_genes(density_analysis, threshold = density_threshold)
-write.csv(final_genes_density, 
+write.csv(final_genes_density,
           file.path(output_dir, "candidate_genes_density.csv"), row.names = FALSE)
 print_message("________________________________\n")
 
@@ -72,7 +70,7 @@ plot_mclust_diagnostic(mclust_analysis, sel_groups = mclust_groups)
 dev.off()
 # Save Mclust summary
 final_genes_mclust <- select_genes_mclust(mclust_analysis, sel_groups = mclust_groups)
-write.csv(final_genes_mclust, 
+write.csv(final_genes_mclust,
           file.path(output_dir, "candidate_genes_mclust.csv"), row.names = FALSE)
 print_message("________________________________\n")
 

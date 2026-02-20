@@ -25,7 +25,7 @@ run_functional_enrichment <- function(genes, dbs = NULL, alpha = 0.05) {
     dbs <- c("GO_Biological_Process_2023", "KEGG_2021_Human", "Reactome_Pathways_2024")
   }
   # 2. Connect to EnrichR and retrieve results
-  cat("Connecting to Enrichr for databases:", paste(dbs, collapse = ", "), "...\n")
+  print_message("Connecting to Enrichr for databases:", paste(dbs, collapse = ", "), "...")
   results <- enrichR::enrichr(genes, dbs)
   # 3. Filter results based on adjusted P-value
   filtered_results <- lapply(results, function(df) {
@@ -34,7 +34,7 @@ run_functional_enrichment <- function(genes, dbs = NULL, alpha = 0.05) {
   })
   # 4. Print number of significant terms found for each database
   for (db in names(filtered_results)) {
-    cat(sprintf("- %s: %d significant terms found.\n", db, nrow(filtered_results[[db]])))
+    print_message(sprintf("- %s: %d significant terms found.\n", db, nrow(filtered_results[[db]])))
   }
 
   return(filtered_results)

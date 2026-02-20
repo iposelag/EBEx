@@ -164,7 +164,7 @@ plot_radarchart <- function(data, metric, plot_name, output_dir = NULL, min, max
     cex = 1, pt.cex = 1.5
   )
   if (!is.null(output_dir)) {
-      cat(sprintf("Radar chart saved to: %s\n", file.path(output_dir, paste0(plot_name, "_", metric, ".pdf"))))
+      print_message(sprintf("Radar chart saved to: %s\n", file.path(output_dir, paste0(plot_name, "_", metric, ".pdf"))))
   }
 
   return(invisible(NULL))
@@ -362,7 +362,7 @@ barplot_feature_selection <- function(feature_selection_data, output_file = NULL
       width = 12, 
       height = 6
     )
-    cat(sprintf("Barplot saved to: %s\n", output_file))
+    print_message(sprintf("Barplot saved to: %s\n", output_file))
   }
 
   return(invisible(p))
@@ -440,7 +440,7 @@ plot_enrichment_dotplot <- function(enrichment_df, title, n_input_genes, top_n =
   if (!is.null(output_file)) {
     if (!dir.exists(dirname(output_file))) dir.create(dirname(output_file), recursive = TRUE)
     ggplot2::ggsave(filename = output_file, plot=p, device = "pdf", width = 10, height = 8)
-    cat("Enrichment dotplot saved to:", output_file, "\n")
+    print_message("Enrichment dotplot saved to:", output_file)
   }
 
   return(invisible(p))

@@ -1,4 +1,3 @@
-
 #!/usr/bin/env Rscript
 ######################################
 ## ML training and explainability for candidate gene list
@@ -130,7 +129,6 @@ print_message("________________________________")
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 6. FINISH
-stopCluster(cl)
 fin <- Sys.time()
 print_message("Pipeline completed!")
 print_message("Total time:", fin - ini)

@@ -39,7 +39,7 @@ run_dea_limma <- function(expr_matrix, metadata, gene_names, output_dir, group_c
     if (!is.null(colnames_design_formula)) colnames(mod) <- colnames_design_formula
   }
   # 2. Fit Linear Model
-  cat("Fitting linear model...\n")
+  print_message("Fitting linear model...")
   fit0 <- limma::lmFit(expr_matrix, mod)
   # 3. Contrast Matrix
   contrast.matrix <- limma::makeContrasts(contrasts = contrast, levels = mod)
