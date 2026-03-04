@@ -2,3 +2,7 @@ url: https://iposelag.github.io/EBEx/
 template:
   bootstrap: 5
 
+# Configuración explícita del logo
+figure:
+  contents:
+    - logo.png
