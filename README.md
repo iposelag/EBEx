@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# EBEx
+# EBEx <img src="man/figures/logo.png" align="right" height="300" />
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -83,10 +83,6 @@ insight, enabling:
 
 Visit EBEx/docs/reference/index.html to check the package documentation
 and tutorials.
-
-## Vingettes
-
-Comming soon!
 
 ## Citation
 
