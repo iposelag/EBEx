@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# EBEx <img src="man/figures/logo.png" align="right" height="300" />
+# <img src="man/figures/logo4.png" align="top" height="100" />
 
 <!-- badges: start -->
 <!-- badges: end -->
