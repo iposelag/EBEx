@@ -115,8 +115,8 @@ plot_radarchart(data_test, metric, "test", output_dir = NULL, minmax[1], minmax[
 ```
 
 ```{r, echo = FALSE, out.width = '48%', fig.show = 'hold', fig.cap = "Performance Radar Charts: Test (left) and CV (right)"}
-knitr::include_graphics(c("vignettes/figures/radarchart_test_candidate_normMCC.png", 
-                          "vignettes/figures/radarchart_cross_validation_candidate_normMCC.png"))
+knitr::include_graphics(c("figures/radarchart_test_candidate_normMCC.png", 
+                          "figures/radarchart_cross_validation_candidate_normMCC.png"))
 ```
 
 ## 
