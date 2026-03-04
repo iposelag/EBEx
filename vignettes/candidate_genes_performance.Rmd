@@ -85,7 +85,7 @@ Saving multiple .Rda objects to test/results_candidate/ML_models/xgb_model.Rda .
 [2026-02-20 19:36:38] :     Extracting model results... 
 ```
 
-```{r, fig.width = 10, fig.height = 8, fig.show = 'hold', out.width = '60%', fig.align = 'default', message = FALSE}
+```{r, fig.width = 10, fig.height = 8, fig.show = 'hold', out.width = '60%', fig.align = 'default', eval = FALSE}
 # results <- readRDS("/home/iria/bsc008817/COPD/EBEx/test/results_candidate/models_results.rds")
 # Prepare data and plot
 print_message("Processing results for plotting...")
