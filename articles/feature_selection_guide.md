@@ -37,6 +37,13 @@ expression_train <- split_data$train
 expression_test <- split_data$test
 ```
 
+``` text
+#> [2026-03-04 10:28:43] :     Class imbalance: train set 
+#> [2026-03-04 10:28:43] :     COPD: 67.111, CTRL: 32.889 
+#> [2026-03-04 10:28:43] :     Class imbalance: test set 
+#> [2026-03-04 10:28:43] :     COPD: 67.105, CTRL: 32.895 
+```
+
 ### Example 1: Data-Driven Selection
 
 For obtaining the Data-Driven list we need the Differentially Expressed
@@ -60,6 +67,12 @@ genes_mrmr <- run_feature_selection(
 print_message(genes_mrmr)
 ```
 
+``` text
+#> [2026-03-04 10:30:02] :     Obtaining data driven genes 
+#> [2026-03-04 10:30:02] :     Obtaining mrmr genes 
+#> Read 76 items
+```
+
 ### Example 2: Disease-Related Curated Genes
 
 For obtaining the Disease-Related genes, we use the DisGeNet database.
@@ -69,6 +82,7 @@ disease code (COPD: C0024117).
 
 ``` r
 # This code block requires having the DisGeNet database downloaded and knowing the disease code
+raw_dir <- file.path(raw_dir, "disgenet_tables")
 genes_disgenet <- run_feature_selection(
   procedure = "disease_related",
   target_var = target_var,
@@ -78,4 +92,9 @@ genes_disgenet <- run_feature_selection(
   directory_to_save = output_dir
 )
 print_message(genes_disgenet)
+```
+
+``` test
+#> [2026-03-04 10:38:53] :     Obtaining disease related curated genes 
+#> [2026-03-04 10:38:54] :     KLF5, CD8A, CYP1A1, CYP1A2, DSP, ELN, EPHX1, FOXO3, CXCL1, CXCL2, HDAC2, HMOX1, HTR2A, IL6, CXCL8, MMP1, MMP9, MMP14, NOS2, NOS3, SERPINA1, SFTPD, SOD3, TGFB1, TNF, TNNT2, TP53, FAM13A, RAPGEF3, MTCL1, TRPV4, EEFSEC, MIR218-2 
 ```

@@ -55,7 +55,7 @@
 </h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>EBEx is a R package that integrates an <strong>E</strong>nsemble-<strong>B</strong>ased <strong>Ex</strong>plainable AI pipeline for prioritising disease relevant genes from transcriptomic data, using Chronic Obstructive Pulmonary Disease (COPD) as a use case. The proposed pipeline allows the identification of COPD-associated genes that are less sensitive to disease heterogeneity than classical case-control approaches such as Differential Expression Analysis.</p>
+<p>EBEx is a R package that integrates an <strong>E</strong>nsemble-<strong>B</strong>ased <strong>Ex</strong>plainable AI pipeline for prioritising relevant genes of complex diseases from transcriptomic data, using Chronic Obstructive Pulmonary Disease (COPD) as a use case. We hypothesise that no single classifier is universally optimal for modelling a heterogeneous disease such as COPD. Therefore, we formulated COPD molecular analysis as a supervised prediction task (case vs. control) and implemented an explainable ensemble-based ML framework to identify robust and biologically meaningful gene signatures.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -67,7 +67,33 @@
 <div class="section level2">
 <h2 id="study-overview">Study Overview<a class="anchor" aria-label="anchor" href="#study-overview"></a>
 </h2>
-<p>This work presents a computational pipeline built upon an ensemble of explainable AI methods. Framed as a patients vs. control predictive task, the approach identifies candidate markers, including genes with general effects on disease status as well as genes associated with specific patient subgroups. To maximise sensitivity, the pipeline integrates predictions from well-established ML classifiers–such as Random Forest (RF) and Support Vector Machines (SVM)–trained on multiple, complementary candidate gene lists. These lists comprise genes with strong signal-to-noise ratios derived from univariate analyses, including DEA, together with genes previously reported in the literature. Importantly, the initial lists are expanded to include additional genes acting within the same biological pathways, which may contribute to disease through shared molecular mechanisms. Model explainability scores are used to evaluate the contribution of each gene, enabling the prioritisation of those with the highest predictive value while deprioritising less informative candidates. By aggregating sample-specific explainability scores across classifiers and gene lists, the pipeline captures gene contributions from multiple methodological perspectives. This methodological diversity contributes decisively to the results, as it allows us in turn to identify COPD-relevant genes that, due to the molecular heterogeneity inherent to the disease, are usually neglected by most specific classifiers and gene lists.</p>
+<p align="center">
+<img src="reference/figures/pipeline_overview.png" width="600"></p>
+<p>This work presents a computational pipeline based on an ensemble of explainable AI methods for the identification of robust COPD-associated genes.</p>
+<p>We formulate COPD molecular analysis as a supervised prediction task (patients vs. controls). Within this framework, the pipeline identifies candidate markers capturing genes with general effects on disease status as well as genes associated with specific patient subgroups.</p>
+<p>To maximise sensitivity and robustness, the approach integrates predictions from <strong>multiple well-established ML classifiers</strong>, including Random Forest (RF) and Support Vector Machines (SVM). These models are trained on several <strong>complementary candidate gene lists</strong>. The candidate lists include:</p>
+<ul>
+<li>Genes with strong signal-to-noise ratios derived from univariate analyses (<strong>DEA</strong>) and using multivariate strategies (<strong>mRMR</strong>)</li>
+<li>Genes previously reported in the literature (<strong>DisGeNET</strong>)</li>
+<li>Additional genes belonging to the same biological pathways, allowing the capture of shared molecular mechanisms that may contribute to disease (<strong>OmniPath, GUILDify</strong>)</li>
+</ul>
+<p><strong>Model explainability</strong> scores are used to quantify the contribution of each gene to the predictive task. For each scenario, sample-specific absolute explainability scores are:</p>
+<ol style="list-style-type: decimal">
+<li>Normalised<br>
+</li>
+<li>Aggregated by gene</li>
+<li>Combined across modelling scenarios using the maximum score</li>
+</ol>
+<p>This aggregation strategy captures gene relevance from multiple methodological perspectives. The resulting <strong>relevance scores</strong> are ranked to define the final candidate gene set, which is subsequently validated in independent cohorts.</p>
+<p>The methodological diversity embedded in the pipeline is central to its performance. By integrating classifiers, gene lists, and explainability metrics, the framework is able to recover COPD-relevant genes that may be overlooked by single models or narrowly defined feature sets. This is particularly important given the molecular heterogeneity inherent to COPD. Finally, the predictive signals are translated into biological insight, enabling:</p>
+<ul>
+<li>Identification of potential <strong>biomarkers</strong><br>
+</li>
+<li>Characterisation of <strong>regulatory mechanisms</strong><br>
+</li>
+<li>Definition of molecular COPD <strong>endotypes</strong>
+</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
@@ -76,6 +102,11 @@
 </div>
 <div class="section level2">
 <h2 id="vingettes">Vingettes<a class="anchor" aria-label="anchor" href="#vingettes"></a>
+</h2>
+<p>Comming soon!</p>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
 <p>Comming soon!</p>
 </div>
