@@ -256,7 +256,7 @@ print_message <- function(..., verbose = getOption("EBEx.verbose", default = TRU
   })
   
   message_text <- paste(unlist(args), collapse = " ")
-  print_message(format(Sys.time(), "[%Y-%m-%d %H:%M:%S]"), ":    ", message_text)
+  cat(format(Sys.time(), "[%Y-%m-%d %H:%M:%S]"), ":    ", message_text)
   
   return(invisible(NULL))
 }

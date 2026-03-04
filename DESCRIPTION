@@ -47,7 +47,9 @@ Imports:
     tune,
     workflows,
     xgboost,
-    yardstick
+    yardstick,
+    RColorBrewer,
+    rlang
 URL: https://iposelag.github.io/EBEx/
 Suggests: 
     knitr,
