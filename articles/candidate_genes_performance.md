@@ -1,4 +1,4 @@
-# Step 02: Classification Performance on candidate genes and subsequent analysis
+# Step 02: Classification Performance on candidate genes
 
 ``` r
 library(EBEx)
@@ -51,6 +51,8 @@ Read 172 items
 [2026-03-04 14:21:36] :     COPD: 67.105, CTRL: 32.895 
 ```
 
+### Cross-validation training
+
 ``` r
 print_message("Running ML models on candidate gene list...")
 results <- ML_models(
@@ -80,6 +82,11 @@ Saving multiple .Rda objects to test/results_candidate/ML_models/knn_model.Rda .
 Saving multiple .Rda objects to test/results_candidate/ML_models/xgb_model.Rda ...XGB done
 [2026-02-20 19:36:38] :     Extracting model results... 
 ```
+
+### Plotting results
+
+Now that we have our different ML models trained, we can plot the
+results:
 
 ``` r
 # results <- readRDS("/home/iria/bsc008817/COPD/EBEx/test/results_candidate/models_results.rds")

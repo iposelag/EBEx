@@ -76,10 +76,6 @@ insight, enabling:
 Visit EBEx/docs/reference/index.html to check the package documentation
 and tutorials.
 
-## Vingettes
-
-Comming soon!
-
 ## Citation
 
 Comming soon!
