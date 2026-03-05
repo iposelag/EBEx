@@ -2,13 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{process_cross_validation_metrics}
 \alias{process_cross_validation_metrics}
-\title{Process Cross-Validation Metrics from Results List
-converts the nested list of cross-validation metrics into a long-format data frame}
+\title{Process Cross-Validation Metrics from Results List}
 \usage{
 process_cross_validation_metrics(results_models, classifiers)
 }
+\arguments{
+\item{results_models}{The list containing the results of the ML models, including cross-validation metrics.}
+
+\item{classifiers}{A character vector of classifier names to process (e.g., c("  rf", "svm_r", "knn")).}
+}
+\value{
+A data frame with columns: classifier, metric, mean, sd.
+}
 \description{
-Process Cross-Validation Metrics from Results List
 converts the nested list of cross-validation metrics into a long-format data frame
 }
-\keyword{external}

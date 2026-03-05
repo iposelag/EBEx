@@ -174,9 +174,15 @@ rename_input_classifier <- function(x, sep = "_") {
 # METRICS PROCESSING
 
 #' Process Cross-Validation Metrics from Results List
+#'
+#' @description 
 #' converts the nested list of cross-validation metrics into a long-format data frame
 #'
-#' @keywords external
+#' @param results_models The list containing the results of the ML models, including cross-validation metrics.
+#' @param classifiers A character vector of classifier names to process (e.g., c("  rf", "svm_r", "knn")).
+#' @return A data frame with columns: classifier, metric, mean, sd.
+#'
+#' @export
 process_cross_validation_metrics <- function(results_models, classifiers) {
 
   all_metrics <- purrr::map_dfr(classifiers, function(cl) {
@@ -200,8 +206,16 @@ process_cross_validation_metrics <- function(results_models, classifiers) {
   return(all_metrics)
 }
 
-#' Process Test Metrics from Results List: converts the nested list of test metrics into a long-format data frame
-#' @keywords internal
+#' Process Test Metrics from Results List: 
+#'
+#' @description 
+#' converts the nested list of test metrics into a long-format data frame
+#'
+#' @param results_models The list containing the results of the ML models, including test metrics.
+#' @param classifiers A character vector of classifier names to process (e.g., c("rf", "svm_r", "knn")).
+#' @return A data frame with columns: classifier, metric, estimate.
+#'
+#' @export
 process_test_metrics <- function(results_models, classifiers) {
 
   all_metrics <- purrr::map_dfr(classifiers, function(cl) {

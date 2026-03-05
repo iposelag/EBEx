@@ -2,11 +2,18 @@
 % Please edit documentation in R/utils.R
 \name{process_test_metrics}
 \alias{process_test_metrics}
-\title{Process Test Metrics from Results List: converts the nested list of test metrics into a long-format data frame}
+\title{Process Test Metrics from Results List:}
 \usage{
 process_test_metrics(results_models, classifiers)
 }
-\description{
-Process Test Metrics from Results List: converts the nested list of test metrics into a long-format data frame
+\arguments{
+\item{results_models}{The list containing the results of the ML models, including test metrics.}
+
+\item{classifiers}{A character vector of classifier names to process (e.g., c("rf", "svm_r", "knn")).}
 }
-\keyword{internal}
+\value{
+A data frame with columns: classifier, metric, estimate.
+}
+\description{
+converts the nested list of test metrics into a long-format data frame
+}
