@@ -13,7 +13,7 @@ meaningful gene signatures.
 ## Installation
 
 You can install the development version of EBEx from
-[GitHub](https://github.com/) directly in R with:
+[GitHub](https://github.com/iposelag/EBEx) directly in R with:
 
 ``` r
 if (!require("remotes")) install.packages("remotes")
