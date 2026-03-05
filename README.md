@@ -2,7 +2,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!--# <img src="man/figures/logo4.png" align="top" height="100" /> -->
 
-# <img src="man/figures/logo.png" align="top" height="100" style="margin-rght: 20px;"/>
+# <img src="man/figures/logo.png" align="top" height="130" style="margin-rght: 20px;"/>
 
 <!-- badges: start -->
 <!-- badges: end -->
