@@ -168,8 +168,9 @@ Comming soon!
 - [`print_message()`](https://iposelag.github.io/EBEx/reference/print_message.md)
   : Print Timestamped Messages
 - [`process_cross_validation_metrics()`](https://iposelag.github.io/EBEx/reference/process_cross_validation_metrics.md)
-  : Process Cross-Validation Metrics from Results List converts the
-  nested list of cross-validation metrics into a long-format data frame
+  : Process Cross-Validation Metrics from Results List
+- [`process_test_metrics()`](https://iposelag.github.io/EBEx/reference/process_test_metrics.md)
+  : Process Test Metrics from Results List:
 - [`rename_input_classifier()`](https://iposelag.github.io/EBEx/reference/rename_input_classifier.md)
   : Rename Composite Input-Classifier Names
 - [`rf_model()`](https://iposelag.github.io/EBEx/reference/rf_model.md)
