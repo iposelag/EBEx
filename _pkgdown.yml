@@ -12,3 +12,7 @@ template:
         </style>
   params:
     logo: man/figures/logo.png
+
+navbar:
+  components:
+      icon: ~  # Elimina el icono de la casita
