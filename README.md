@@ -1,7 +1,8 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!--# <img src="man/figures/logo4.png" align="top" height="100" /> -->
 
-# <img src="man/figures/logo4.png" align="top" height="100" />
+# <img src="man/figures/logo.png" align="top" height="100" style="margin-rght: 20px;"/>
 
 <!-- badges: start -->
 <!-- badges: end -->
@@ -19,7 +20,7 @@ meaningful gene signatures.
 ## Installation
 
 You can install the development version of EBEx from
-[GitHub](https://github.com/) directly in R with:
+[GitHub](https://github.com/iposelag/EBEx) directly in R with:
 
 ``` r
 if (!require("remotes")) install.packages("remotes")

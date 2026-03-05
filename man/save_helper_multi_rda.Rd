@@ -4,7 +4,14 @@
 \alias{save_helper_multi_rda}
 \title{Internal helper to save multiple objects into one .Rda file}
 \usage{
-save_helper_multi_rda(obj_list, name_list, filename, directory, subfolder = "")
+save_helper_multi_rda(
+  obj_list,
+  name_list,
+  filename,
+  directory,
+  subfolder = "",
+  verbose = TRUE
+)
 }
 \description{
 Internal helper to save multiple objects into one .Rda file

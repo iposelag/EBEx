@@ -1,5 +1,14 @@
 url: https://iposelag.github.io/EBEx/
 template:
   bootstrap: 5
+  includes:
+      in_header: |
+        <style>
+          /* Forzar que el logo del cuerpo esté a la izquierda */
+          .page-header img {
+            float: left;
+            margin-right: 15px;
+          }
+        </style>
   params:
-    logo: man/figures/logo4.png
+    logo: man/figures/logo.png

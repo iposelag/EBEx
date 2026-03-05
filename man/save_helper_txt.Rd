@@ -4,7 +4,7 @@
 \alias{save_helper_txt}
 \title{Internal helper to handle directory creation and saving text files}
 \usage{
-save_helper_txt(data, filename, directory, subfolder = "")
+save_helper_txt(data, filename, directory, subfolder = "", verbose = TRUE)
 }
 \description{
 Internal helper to handle directory creation and saving text files

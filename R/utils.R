@@ -8,12 +8,14 @@ NULL
 
 #' Internal helper to handle directory creation and saving text files
 #' @keywords internal
-save_helper_txt <- function(data, filename, directory, subfolder = "") {
+save_helper_txt <- function(data, filename, directory, subfolder = "", verbose = TRUE) {
 
+  print_message("Saving text file to", file.path(directory, subfolder, filename), "...", verbose = verbose)
+  
   out_dir <- file.path(directory, subfolder)
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
-  write(data, file = file.path(out_dir, filename), ncolumns = 1)
   
+  write(data, file = file.path(out_dir, filename), ncolumns = 1)
   return(invisible(NULL))
 }
 
@@ -33,20 +35,20 @@ save_helper_rda <- function(data_obj, obj_name, filename, directory, subfolder =
 
 #' Internal helper to save multiple objects into one .Rda file
 #' @keywords internal
-save_helper_multi_rda <- function(obj_list, name_list, filename, directory, subfolder = "") {
+save_helper_multi_rda <- function(obj_list, name_list, filename, directory, subfolder = "", verbose = TRUE) {
 
+  # Ahora 'verbose' sí existe en este ámbito y se puede pasar
   print_message("Saving multiple .Rda objects to", file.path(directory, subfolder, filename), "...", verbose = verbose)
+  
   out_dir <- file.path(directory, subfolder)
   if (!dir.exists(out_dir)) dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
-  # Create a temporary environment
+  
   tmp_env <- new.env()
-  # Assign each object its specific name within that environment
   for (i in seq_along(obj_list)) {
     assign(name_list[[i]], obj_list[[i]], envir = tmp_env)
   }
-  # Save the list of names from that environment into one file
+  
   save(list = unlist(name_list), file = file.path(out_dir, filename), envir = tmp_env)
-
   return(invisible(NULL))
 }
 
@@ -242,21 +244,22 @@ process_times <- function(results_models, unit = "mins") {
 #' @export
 print_message <- function(..., verbose = getOption("EBEx.verbose", default = TRUE)) {
   
-  # If verbose is FALSE, exit the function immediately without printing
   if (!verbose) return(invisible(NULL))
   
   args <- list(...)
   
-  # Your formatting logic
   args <- lapply(args, function(x) {
     if (is.null(x)) return("NULL")
     if (is.table(x)) return(paste(paste(names(x), x, sep = ": "), collapse = ", "))
-    if (is.vector(x) && length(x) > 1) return(paste(x, collapse = ", "))
+    # Evitar error si x no es un vector atómico (ej: una lista de modelos)
+    if (!is.atomic(x)) return(paste0("<", class(x)[1], ">"))
+    if (length(x) > 1) return(paste(x, collapse = ", "))
     return(as.character(x))
   })
   
   message_text <- paste(unlist(args), collapse = " ")
-  cat(format(Sys.time(), "[%Y-%m-%d %H:%M:%S]"), ":    ", message_text)
+  # Añadido \n al final para que cada mensaje sea una línea nueva
+  cat(format(Sys.time(), "[%Y-%m-%d %H:%M:%S]"), ":    ", message_text, "\n")
   
   return(invisible(NULL))
 }
