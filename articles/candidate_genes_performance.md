@@ -89,7 +89,7 @@ Now that we have our different ML models trained, we can plot the
 results:
 
 ``` r
-# results <- readRDS("/home/iria/bsc008817/COPD/EBEx/test/results_candidate/models_results.rds")
+# models_results <- readRDS("/home/iria/bsc008817/COPD/EBEx/test/results_candidate/models_results.rds")
 # Prepare data and plot
 print_message("Processing results for plotting...")
 models_results_cv_df <- process_cross_validation_metrics(
@@ -105,12 +105,11 @@ models_results_cv_df$input_list <- rep("Candidate List", nrow(models_results_cv_
 models_results_test_df$classifier <- rename_classifier(models_results_test_df$classifier)
 models_results_test_df$input_list <- rep("Candidate List", nrow(models_results_test_df))
 
-data_test <- prepare_data_for_radarchart(models_results_test_df, metric, "estimate", minmax[1], minmax[2])
-data_cv <- prepare_data_for_radarchart(models_results_cv_df, metric, "mean", minmax[1], minmax[2])
-
 # Parameters
 minmax <- c(0.5,0.9,0.1)
 metric <- "normMCC"
+data_test <- prepare_data_for_radarchart(models_results_test_df, metric, "estimate", minmax[1], minmax[2])
+data_cv <- prepare_data_for_radarchart(models_results_cv_df, metric, "mean", minmax[1], minmax[2])
 
 # Plotting (output_dir = NULL for showing plots here)
 plot_radarchart(data_cv, metric, "cv", output_dir = NULL, minmax[1], minmax[2], minmax[3])
