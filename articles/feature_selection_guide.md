@@ -1,6 +1,7 @@
 # Step 01: Feature Selection
 
 ``` r
+
 library(EBEx)
 #> Warning: replacing previous import 'proxy::dist' by 'stats::dist' when loading
 #> 'EBEx'
@@ -14,6 +15,7 @@ and Disease-Related genes. First, we will define some global variables
 and relative paths:
 
 ``` r
+
 # Parameters
 target_var <- "dis_condition"
 disease_code <- "C0024117"
@@ -28,6 +30,7 @@ and the target variable. Therefore, the first step is to obtain the
 train and test sets:
 
 ``` r
+
 # Extract train and test sets
 split_data <- obtain_split_data(directory_to_load = raw_dir,
                                 file_name = "expression",
@@ -53,6 +56,7 @@ gene per line. For obtaining the mRMR genes, we need the ./mrmr binary
 program and the selected threshold (a = 0.031 in this case).
 
 ``` r
+
 # This code block requires the mRMR binary
 genes_mrmr <- run_feature_selection(
   procedure = "data_driven",
@@ -81,6 +85,7 @@ curated resources and we can extract genes already associated with a
 disease code (COPD: C0024117).
 
 ``` r
+
 # This code block requires having the DisGeNet database downloaded and knowing the disease code
 raw_dir <- file.path(raw_dir, "disgenet_tables")
 genes_disgenet <- run_feature_selection(

@@ -1,6 +1,7 @@
 # Step 02: Classification Performance on candidate genes
 
 ``` r
+
 library(EBEx)
 #> Warning: replacing previous import 'proxy::dist' by 'stats::dist' when loading
 #> 'EBEx'
@@ -15,6 +16,7 @@ evaluating on the final candidate genes list. First, we will define some
 global variables and relative paths:
 
 ``` r
+
 # Parameters
 target_var <- "dis_condition"
 # Relative paths
@@ -31,6 +33,7 @@ load these directly or obtain it by using the functions of the “Step 01:
 Feature Selection” vignette:
 
 ``` r
+
 # Load gene list (already pre-computed)
 gene_list <- load_gene_list(genes_list = genes,
                base_path = feature_selection_dir)
@@ -54,6 +57,7 @@ Read 172 items
 ### Cross-validation training
 
 ``` r
+
 print_message("Running ML models on candidate gene list...")
 results <- ML_models(
   data = expression_train,
@@ -89,6 +93,7 @@ Now that we have our different ML models trained, we can plot the
 results:
 
 ``` r
+
 # models_results <- readRDS("/home/iria/bsc008817/COPD/EBEx/test/results_candidate/models_results.rds")
 # Prepare data and plot
 print_message("Processing results for plotting...")
