@@ -32,7 +32,7 @@ dependencies include `Biobase`, `limma`, `sva`, `ComplexHeatmap`, and
 ## Getting Started
 
 - [Pipeline
-  Overview](https://iposelag.github.io/EBEx/articles/pipeline_overview.md):
+  Overview](https://iposelag.github.io/EBEx/articles/study_overview.md):
   conceptual description of the EBEx framework and its design rationale
 - [Step 01: Feature
   Selection](https://iposelag.github.io/EBEx/articles/feature_selection_guide.md):
