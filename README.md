@@ -37,7 +37,7 @@ dependencies include `Biobase`, `limma`, `sva`, `ComplexHeatmap`, and
 
 ## Getting Started
 
--   [Pipeline Overview](articles/pipeline_overview.html): conceptual
+-   [Pipeline Overview](articles/study_overview.html): conceptual
     description of the EBEx framework and its design rationale
 -   [Step 01: Feature Selection](articles/feature_selection_guide.html):
     example of gene list generation from data-driven and knowledge-based
