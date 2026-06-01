@@ -4,7 +4,8 @@ pkgdown_sha: ~
 articles:
   candidate_genes_performance: candidate_genes_performance.html
   feature_selection_guide: feature_selection_guide.html
-last_built: 2026-06-01T10:02Z
+  study_overview: study_overview.html
+last_built: 2026-06-01T11:02Z
 urls:
   reference: https://iposelag.github.io/EBEx/reference
   article: https://iposelag.github.io/EBEx/articles
