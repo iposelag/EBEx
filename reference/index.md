@@ -37,6 +37,10 @@
   : GLM Binary Model
 - [`glm_multiclass_model()`](https://iposelag.github.io/EBEx/reference/glm_multiclass_model.md)
   : GLM Multiclass Model
+- [`join_pca_with_metadata()`](https://iposelag.github.io/EBEx/reference/join_pca_with_metadata.md)
+  : Join PCA Coordinates with Sample Metadata
+- [`join_umap_with_metadata()`](https://iposelag.github.io/EBEx/reference/join_umap_with_metadata.md)
+  : Join UMAP Coordinates with Sample Metadata
 - [`knn_model()`](https://iposelag.github.io/EBEx/reference/knn_model.md)
   : KNN Model
 - [`load_gene_list()`](https://iposelag.github.io/EBEx/reference/load_gene_list.md)
@@ -59,8 +63,12 @@
   : Obtain Omnipath expansion
 - [`obtain_split_data()`](https://iposelag.github.io/EBEx/reference/obtain_split_data.md)
   : Split Data into Training and Test Sets
+- [`perform_pca()`](https://iposelag.github.io/EBEx/reference/perform_pca.md)
+  : Perform PCA
 - [`perform_pheno_test()`](https://iposelag.github.io/EBEx/reference/perform_pheno_test.md)
   : Perform Statistical Test for Gene-Phenotype Association
+- [`perform_umap()`](https://iposelag.github.io/EBEx/reference/perform_umap.md)
+  : Perform UMAP
 - [`plot_dea_candidates()`](https://iposelag.github.io/EBEx/reference/plot_dea_candidates.md)
   : Plot DEA Candidate Genes
 - [`plot_density_diagnostic()`](https://iposelag.github.io/EBEx/reference/plot_density_diagnostic.md)

@@ -7,7 +7,3 @@ Default Gene Name Mapping for GTEx
 ``` r
 gtex_gene_map
 ```
-
-## Format
-
-An object of class `character` of length 11.

@@ -28,6 +28,8 @@
 <url><loc>https://iposelag.github.io/EBEx/reference/glm_multiclass_model.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/gtex_gene_map.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/index.html</loc></url>
+<url><loc>https://iposelag.github.io/EBEx/reference/join_pca_with_metadata.html</loc></url>
+<url><loc>https://iposelag.github.io/EBEx/reference/join_umap_with_metadata.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/knn_model.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/load_gene_list.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/normalize_shap_values.html</loc></url>
@@ -39,7 +41,9 @@
 <url><loc>https://iposelag.github.io/EBEx/reference/obtain_omnipath_combined.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/obtain_omnipath_expansion.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/obtain_split_data.html</loc></url>
+<url><loc>https://iposelag.github.io/EBEx/reference/perform_pca.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/perform_pheno_test.html</loc></url>
+<url><loc>https://iposelag.github.io/EBEx/reference/perform_umap.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/plot_dea_candidates.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/plot_density_diagnostic.html</loc></url>
 <url><loc>https://iposelag.github.io/EBEx/reference/plot_enrichment_dotplot.html</loc></url>
