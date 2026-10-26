@@ -7,10 +7,7 @@
 
 ## --------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-library(devtools)
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(dplyr)
 library(tidyplots)
 
@@ -39,7 +36,7 @@ samples_shap_matrix <- colnames(shap_matrix)
 samples_shap_matrix <- gsub("^(COPD_|CTRL_)", "", samples_shap_matrix)
 colnames(shap_matrix) <- samples_shap_matrix
 shap_matrix_df <- as.data.frame(t(shap_matrix))
-# Filter and clean phenotypes
+#Filter and clean phenotypes
 pheno_clean <- phenotypic_ctics %>%
   dplyr::select(dis_condition, sex, smoker, age, emphysema, pred_dlco, GOLD_stage, pneumocystis_colonization, pred_fev_postbd, pred_fev_prebd, pred_fvc_postbd, pred_fvc_prebd) %>%
   dplyr::filter(dis_condition == "COPD") %>%
@@ -60,9 +57,11 @@ print_message("________________________________\n")
 ## --------------------------------------------------------------------------------------------------------------------
 # 3. RUN ENRICHMENT
 print_message("Running enrichment analysis...")
-vars_interest <- c("sex", "smoker", "smoker_grouped","age", 
+vars_interest <- c("sex", "smoker", "smoker_grouped","age",
                     "emphysema", "pred_dlco", "GOLD_stage", "pneumocystis_colonization",
                     "pred_fev_postbd", "pred_fev_prebd", "pred_fvc_postbd", "pred_fvc_prebd")
+vars_interest <- c("sex", "smoker", "age", "emphysema", "pred_dlco",
+                   "pred_fev_prebd", "pred_fev_postbd", "pred_fvc_prebd", "pred_fvc_postbd")
 enrich_results <- run_phenotype_enrichment(
   shap_matrix = shap_sub,
   phenotype_data = pheno_sub,
@@ -71,6 +70,33 @@ enrich_results <- run_phenotype_enrichment(
 )
 # Save results
 save_helper_csv(enrich_results, "enrichment_full_results.csv", enrichment_results_dir)
+
+# Table S5: formatted enrichment results
+format_p <- function(p) ifelse(p < 0.001, "<0.001", sprintf("%.3f", p))
+table_s5 <- enrich_results %>%
+  dplyr::mutate(
+    variable = dplyr::recode(variable,
+                             pred_dlco = "DLCO",
+                             pred_fev_prebd = "FEV1 (pre-bronchodilator)",
+                             pred_fev_postbd = "FEV1 (post-bronchodilator)",
+                             pred_fvc_prebd = "FVC (pre-bronchodilator)",
+                             pred_fvc_postbd = "FVC (post-bronchodilator)"),
+    statistic = round(statistic, 3),
+    effect_size = round(effect_size, 3),
+    p.value = format_p(p.value),
+    p_adj = format_p(p_adj)
+  ) %>%
+  dplyr::select(gene, variable, test_type, statistic, p.value, p_adj, effect_size, direction) %>%
+  dplyr::arrange(variable, p_adj) %>%
+  dplyr::rename(
+    "p-value" = "p.value",
+    "p-adjusted" = p_adj,
+    "effect size" = effect_size,
+    "test type" = test_type
+  )
+save_helper_csv(table_s5, "table_s5.csv", enrichment_results_dir)
+
+
 # Create enrichment matrix pvalues
 enriched_matrix <- get_enrichment_matrix(enrich_results)
 # Save enrichment matrix
@@ -79,7 +105,7 @@ save_helper_csv(enriched_matrix, "enrichment_matrix_padj.csv", enrichment_result
 enriched_logical_matrix <- get_enrichment_logical_matrix(enrich_results)
 # List of genes enriched per variable
 enriched_per_variable <- enriched_logical_matrix %>%
-  pivot_longer(-gene, names_to = "variable", values_to = "enriched") %>%
+  tidyr::pivot_longer(-gene, names_to = "variable", values_to = "enriched") %>%
   filter(enriched == TRUE) %>%
   group_by(variable) %>%
   summarise(enriched_genes = list(unique(gene))) %>%
@@ -93,6 +119,12 @@ enriched_logical_matrix <- enriched_logical_matrix %>%
   )
 # Save enrichment matrix
 save_helper_csv(enriched_logical_matrix, "enrichment_logical_matrix.csv", enrichment_results_dir)
+
+n_enriched_per_variable <- enriched_logical_matrix %>%
+  tidyr::pivot_longer(-c(gene, canonical_gene, extended_gene), names_to = "variable", values_to = "enriched") %>%
+  group_by(variable) %>%
+  summarise(n_significant = sum(enriched), .groups = "drop")
+save_helper_csv(n_enriched_per_variable, "n_significant_genes_per_variable.csv", enrichment_results_dir)
 print_message("________________________________\n")
 
 ## --------------------------------------------------------------------------------------------------------------------
@@ -105,8 +137,8 @@ plot_data <- shap_sub %>%
   tidyr::pivot_longer(-sample_id, names_to = "Gene", values_to = "mean_shap") %>%
   left_join(tibble::rownames_to_column(pheno_sub, "sample_id"), by = "sample_id")
 # Emphysema
-enriched_emphysema <- enrich_results %>% 
-  filter(variable == "emphysema", p_adj < 0.05) %>% 
+enriched_emphysema <- enrich_results %>%
+  filter(variable == "emphysema", p_adj < 0.05) %>%
   pull(gene)
 plot_data %>%
   filter(Gene %in% enriched_emphysema) %>%
@@ -115,8 +147,8 @@ plot_data %>%
   split_plot(by = Gene) %>%
   save_plot(file.path(output_dir, "enrichment_emphysema.pdf"))
 # Predicted DLCO
-enriched_dlco <- enrich_results %>% 
-  filter(variable == "pred_dlco", p_adj < 0.05) %>% 
+enriched_dlco <- enrich_results %>%
+  filter(variable == "pred_dlco", p_adj < 0.05) %>%
   pull(gene)
 plot_data %>%
   filter(Gene %in% enriched_dlco) %>%
@@ -125,8 +157,8 @@ plot_data %>%
   split_plot(by = Gene) %>%
   save_plot(file.path(output_dir, "enrichment_pred_dlco.pdf"))
 # Predicted FEV1 post bronchodilator
-enriched_fev1_postbd <- enrich_results %>% 
-  filter(variable == "pred_fev_postbd", p_adj < 0.05) %>% 
+enriched_fev1_postbd <- enrich_results %>%
+  filter(variable == "pred_fev_postbd", p_adj < 0.05) %>%
   pull(gene)
 plot_data %>%
   filter(Gene %in% enriched_fev1_postbd) %>%
@@ -135,8 +167,8 @@ plot_data %>%
   split_plot(by = Gene) %>%
   save_plot(file.path(output_dir, "enrichment_pred_fev1_postbd.pdf"))
 # Predicted FEV1 pre bronchodilator
-enriched_fev1_prebd <- enrich_results %>% 
-  filter(variable == "pred_fev_prebd", p_adj < 0.05) %>% 
+enriched_fev1_prebd <- enrich_results %>%
+  filter(variable == "pred_fev_prebd", p_adj < 0.05) %>%
   pull(gene)
 plot_data %>%
   filter(Gene %in% enriched_fev1_prebd) %>%

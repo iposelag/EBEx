@@ -4,6 +4,7 @@
 #' @importFrom tidyr unnest pivot_wider pivot_longer
 #' @importFrom purrr map
 #' @importFrom rlang .data !! sym
+#' @importFrom rstatix wilcox_effsize kruskal_effsize
 NULL
 
 #' Perform Statistical Test for Gene-Phenotype Association
@@ -12,59 +13,89 @@ NULL
 #' This function takes a dataframe containing mean SHAP values for a gene and a phenotypic variable,
 #' checks for normality, and automatically selects the appropriate statistical test (correlation for numeric
 #' variables, t-test or ANOVA for normally distributed groups, and non-parametric tests otherwise).
+#' It also reports an effect size and, where applicable, the direction of the association.
 #'
 #' @param data Dataframe containing 'mean_shap' and the target variable.
 #' @param variable Character. Name of the phenotypic variable column.
 #'
-#' @return A tidy dataframe with test results, including p-values, test type, and normality information.
+#' @return A tidy dataframe with test results, including p-values, test type, normality information,
+#' `effect_size` (Pearson r / Spearman rho; difference in means for t-test; Wilcoxon r for Mann-Whitney U;
+#' eta-squared for ANOVA and Kruskal-Wallis) and `direction` (NA for ANOVA and Kruskal-Wallis).
 #'
 #' @export
+
 perform_pheno_test <- function(data, variable) {
 
-  # 1. Clean data: remove rows with NAs in the variable or in SHAP
   clean_data <- data[!is.na(data[["mean_shap"]]) & !is.na(data[[variable]]), ]
   n_obs <- nrow(clean_data)
-  # 2. Safety check: Need at least 3 observations for shapiro and correlation
   if (n_obs < 3) {
     return(data.frame(
-      p.value = NA, 
-      variable = variable, 
-      test_type = "Insufficient data", 
-      normality_p_value = NA
+      p.value = NA, variable = variable, test_type = "Insufficient data",
+      normality_p_value = NA, effect_size = NA, direction = NA
     ))
   }
-  # 3. Check normality of SHAP values
   shap_normality <- stats::shapiro.test(clean_data[["mean_shap"]])
   is_normal <- shap_normality$p.value >= 0.05
-  
-  # 4. Determine variable type and run test
+
   if (is.numeric(clean_data[[variable]])) {
-    # 4.1. Correlation
+    ## Correlacion: el "estimate" de cor.test YA es el effect size (r/rho); su signo da la direccion
     method <- if (is_normal) "pearson" else "spearman"
-    test_result <- stats::cor.test(clean_data[["mean_shap"]], clean_data[[variable]], 
-                                   method = method, use = "complete.obs")
+    test_result <- stats::cor.test(clean_data[["mean_shap"]], clean_data[[variable]],
+                                    method = method, use = "complete.obs")
     test_type <- paste0(method, " (Normal: ", is_normal, ")")
+    res <- broom::tidy(test_result) %>%
+      dplyr::mutate(effect_size = .data$estimate,
+                     direction = ifelse(.data$estimate > 0, "positive", "negative"))
+
   } else {
-    # 4.2.Comparison of groups
     n_groups <- length(unique(stats::na.omit(clean_data[[variable]])))
+    grp_levels <- levels(droplevels(as.factor(clean_data[[variable]])))
+
     if (n_groups == 2) {
-      test_result <- if (is_normal) stats::t.test(mean_shap ~ get(variable), data = clean_data)
-                     else stats::wilcox.test(mean_shap ~ get(variable), data = clean_data)
-      test_type <- if (is_normal) "t-test" else "Mann-Whitney U"
+      medians <- tapply(clean_data[["mean_shap"]], clean_data[[variable]], stats::median)
+      if (is_normal) {
+        ## t-test: "estimate" YA es la diferencia de medias; su signo da la direccion
+        test_result <- stats::t.test(mean_shap ~ get(variable), data = clean_data)
+        test_type <- "t-test"
+        res <- broom::tidy(test_result) %>%
+          dplyr::mutate(effect_size = .data$estimate,
+                         direction = ifelse(.data$estimate > 0,
+                                             paste0("higher in ", grp_levels[1]),
+                                             paste0("higher in ", grp_levels[2])))
+      } else {
+        ## Wilcoxon: effect size r = Z/sqrt(N) via rstatix
+        test_result <- stats::wilcox.test(mean_shap ~ get(variable), data = clean_data)
+        test_type <- "Mann-Whitney U"
+        eff <- rstatix::wilcox_effsize(clean_data, stats::as.formula(paste0("mean_shap ~ ", variable)))
+        res <- broom::tidy(test_result) %>%
+          dplyr::mutate(effect_size = eff$effsize,
+                         direction = ifelse(medians[1] > medians[2],
+                                             paste0("higher in ", grp_levels[1]),
+                                             paste0("higher in ", grp_levels[2])))
+      }
     } else {
-      test_result <- if (is_normal) stats::aov(mean_shap ~ get(variable), data = clean_data)
-                     else stats::kruskal.test(mean_shap ~ get(variable), data = clean_data)
-      test_type <- if (is_normal) "ANOVA" else "Kruskal-Wallis"
+      if (is_normal) {
+        ## ANOVA: effect size = eta-squared (via effectsize); test omnibus, sin direccion unica
+        test_result <- stats::aov(mean_shap ~ get(variable), data = clean_data)
+        test_type <- "ANOVA"
+        eff <- effectsize::eta_squared(test_result, partial = FALSE)
+        res <- broom::tidy(test_result) %>%
+          dplyr::filter(.data$term != "Residuals") %>%
+          dplyr::mutate(effect_size = eff$Eta2, direction = NA_character_)
+      } else {
+        ## Kruskal-Wallis: effect size = eta-squared (H-based) via rstatix; test omnibus, sin direccion unica
+        test_result <- stats::kruskal.test(mean_shap ~ get(variable), data = clean_data)
+        test_type <- "Kruskal-Wallis"
+        eff <- rstatix::kruskal_effsize(clean_data, stats::as.formula(paste0("mean_shap ~ ", variable)))
+        res <- broom::tidy(test_result) %>%
+          dplyr::mutate(effect_size = eff$effsize, direction = NA_character_)
+      }
     }
   }
-  
-  # 5. Clean results
-  res <- broom::tidy(test_result) %>%
-    dplyr::mutate(
-      variable = variable, 
-      test_type = test_type,
-      normality_p_value = shap_normality$p.value
-    )
+
+  res <- res %>%
+    dplyr::mutate(variable = variable, test_type = test_type,
+                   normality_p_value = shap_normality$p.value)
 
   return(res)
 }
@@ -138,7 +169,7 @@ get_enrichment_logical_matrix <- function(enrichment_df, alpha = 0.05) {
   matrix <- enrichment_df %>%
     dplyr::select(.data$gene, .data$variable, .data$p_adj) %>%
     tidyr::pivot_wider(names_from = .data$variable, values_from = .data$p_adj) %>%
-    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~ !is.na(.) & . < alpha))
+    dplyr::mutate(dplyr::across(dplyr::where(is.numeric), ~ !is.na(.) & . <= alpha))
 
   return(matrix)
 }

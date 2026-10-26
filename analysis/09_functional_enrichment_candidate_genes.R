@@ -7,10 +7,7 @@
 
 ## --------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-library(devtools)
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(ggplot2)
 library(dplyr)
 
@@ -65,7 +62,7 @@ for (db_name in names(enr_canonical)) {
       save_helper_csv(
         data = df,
         filename = filename,
-        directory = output_directory
+        directory = functional_enrichment_results_dir
       )
     }
 }
@@ -75,7 +72,7 @@ print_message("________________________________\n")
 # 3. Visualization
 print_message("Creating enrichment dotplots...\n")
 # 3.1. Dotplot para GO (extended Genes)
-p_go_extended <- plot_enrichment_dotplot(extended_go,
+p_go_extended <- plot_enrichment_dotplot(enr_extended$GO_Biological_Process_2023,
                                       title = "GO: Extended Candidate Genes",
                                       n_input_genes = length(extended_genes),
                                       aspect_ratio = 4)
@@ -83,7 +80,7 @@ if (!is.null(p_go_extended)) {
   ggplot2::ggsave(file.path(output_plots_dir, "dotplot_GO_Extended.pdf"), p_go_extended, width = 10, height = 9.7)
 }
 # 3.2. Dotplot para KEGG (extended Genes)
-p_kegg_extended <- plot_enrichment_dotplot(extended_kegg,
+p_kegg_extended <- plot_enrichment_dotplot(enr_extended$KEGG_2021_Human,
                                           title = "KEGG: Extended Candidate Genes",
                                           n_input_genes = length(extended_genes),
                                           aspect_ratio = 2.8)
@@ -91,7 +88,7 @@ if (!is.null(p_kegg_extended)) {
   ggplot2::ggsave(file.path(output_plots_dir, "dotplot_KEGG_Extended.pdf"), p_kegg_extended, width = 11, height = 9.7)
 }
 # 3.3. Dotplot para Reactome (extended Genes)
-p_reactome_extended <- plot_enrichment_dotplot(extended_reactome,
+p_reactome_extended <- plot_enrichment_dotplot(enr_extended$Reactome_Pathways_2024,
                                         title = "REACTOME: Extended Candidate Genes",
                                         n_input_genes = length(extended_genes),
                                         aspect_ratio = 3)
@@ -99,7 +96,7 @@ if (!is.null(p_reactome_extended)) {
   ggplot2::ggsave(file.path(output_plots_dir, "dotplot_Reactome_Extended.pdf"), p_reactome_extended, width = 10, height = 9.7)
 }
 # 3.4. Dotplot para GO (canonical Genes)
-p_go_canonical <- plot_enrichment_dotplot(canonical_go,
+p_go_canonical <- plot_enrichment_dotplot(enr_canonical$GO_Biological_Process_2023,
                                     title = "GO: Canonical Candidate Genes",
                                     n_input_genes = length(canonical_genes),
                                     aspect_ratio = 2)
@@ -108,7 +105,7 @@ if (!is.null(p_go_canonical)) {
 }
 # 3.5. Dotplot para KEGG (canonical Genes)
 
-p_kegg_canonical <- plot_enrichment_dotplot(canonical_kegg,
+p_kegg_canonical <- plot_enrichment_dotplot(enr_canonical$KEGG_2021_Human,
                                       title = "KEGG: Canonical Candidate Genes",
                                       n_input_genes = length(canonical_genes),
                                       aspect_ratio = 3)
@@ -116,11 +113,11 @@ if (!is.null(p_kegg_canonical)) {
   ggsave(filename = file.path(output_plots_dir, "dotplot_kegg_canonical.pdf"), plot = p_kegg_canonical, device = "pdf", width = 10, height = 9.7)
 }
 # 3.6. Dotplot para Reactome (canonical Genes)
-p_reactome_canonical <- plot_enrichment_dotplot(knwon_reactome,
+p_reactome_canonical <- plot_enrichment_dotplot(enr_canonical$Reactome_Pathways_2024,
                                           title = "REACTOME: Canonical Candidate Genes",
                                           n_input_genes = length(canonical_genes),
                                           aspect_ratio = 3)
-if (!is.null(p_reactome_canonical)) {                                          
+if (!is.null(p_reactome_canonical)) {
   ggsave(filename = file.path(output_plots_dir, "dotplot_Reactome_canonical.pdf"), plot = p_reactome_canonical, device = "pdf", width = 10, height = 9.7)
 }
 print_message("________________________________\n")

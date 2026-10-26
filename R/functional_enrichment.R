@@ -20,6 +20,16 @@ NULL
 #' @export
 run_functional_enrichment <- function(genes, dbs = NULL, alpha = 0.05) {
 
+  if (is.null(getOption("enrichR.base.address"))) {
+  options(
+    enrichR.base.address       = "https://maayanlab.cloud/Enrichr/",
+    enrichR.sites.base.address = "https://maayanlab.cloud/",
+    enrichR.live               = TRUE,
+    enrichR.quiet              = TRUE,
+    enrichR.sites              = c("Enrichr", "FlyEnrichr", "WormEnrichr",
+                                   "YeastEnrichr", "FishEnrichr", "OxEnrichr")
+  )
+  }
   # 1. Set default databases if none provided
   if (is.null(dbs)) {
     dbs <- c("GO_Biological_Process_2023", "KEGG_2021_Human", "Reactome_Pathways_2024")

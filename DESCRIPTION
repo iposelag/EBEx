@@ -7,7 +7,6 @@ Description: EBEx is a R package that integrates an Ensemble-Based Explainable A
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.3
 biocViews: Software, Transcriptomics, Classification
 Depends: 
     R (>= 4.1)
@@ -51,9 +50,13 @@ Imports:
     xgboost,
     yardstick,
     RColorBrewer,
-    rlang
+    rlang,
+    rstatix,
+    effectsize,
+    factoextra
 URL: https://iposelag.github.io/EBEx/
 Suggests: 
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+Config/roxygen2/version: 8.1.0

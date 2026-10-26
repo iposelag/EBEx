@@ -7,9 +7,7 @@
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(dplyr); library(ggplot2); library(ggrepel)
 
 ## --------------------------------------------------------------------------------------------------------------------
@@ -83,7 +81,7 @@ cat("________________________________\n")
 cat("Plotting SHAP vs Occurrence for candidate genes...\n")
 plot_data <- plot_data %>%
   filter(variable_name != "FANCC")
-p_scatter <- plot_shap_occurrence(data = plot_data, y_threshold = 0.0107, title = "Candidate Genes: Importance vs Robustness")
+p_scatter <- plot_shap_occurrence(data = plot_data, y_threshold = 0.0109, title = "Candidate Genes: Importance vs Robustness")
 # Save the plot
 ggplot2::ggsave(file.path(output_dir, "maxSHAP_vs_Occurrence_candidates.pdf"), p_scatter, width = 15, height = 12)
 cat("________________________________\n")

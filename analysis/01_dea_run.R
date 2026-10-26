@@ -7,7 +7,7 @@
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-library(MyPipelinePkg)
+library(EBEx)
 library(Biobase)
 # Global parameters
 set.seed(1234)

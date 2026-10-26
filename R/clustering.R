@@ -1,5 +1,6 @@
 #' @importFrom stats dist hclust cutree
 #' @importFrom proxy dist
+#' @importFrom factoextra fviz_eig
 NULL
 
 #' Perform Sample Clustering
@@ -107,4 +108,138 @@ run_cluster_enrichment <- function(cluster_vec, phenotype_data) {
   results_all$p_adj <- stats::p.adjust(results_all$p_value, method = "BH")
 
   return(results_all)
+}
+
+#' Perform PCA
+#'
+#' @description
+#' Computes a Principal Component Analysis (PCA) on the provided data matrix
+#' (samples as rows, features as columns), scaling and centering it beforehand.
+#' Useful for inspecting global structure and batch effects. Optionally saves
+#' a scree plot (eigenvalues/variance explained per component) to disk.
+#'
+#' @param data Matrix or dataframe. Samples as rows, features (e.g. genes) as columns.
+#' @param num_components Integer. Number of principal components to keep.
+#' @param save_eig_plot Logical. If `TRUE`, saves a scree plot of the first
+#'   `eig_ncp` components via `factoextra::fviz_eig()`. Default `FALSE`.
+#' @param eig_ncp Integer. Number of components to show in the scree plot
+#'   (passed to `factoextra::fviz_eig(ncp = eig_ncp)`). Default 15.
+#' @param output_dir Character. Directory where the scree plot is saved when
+#'   `save_eig_plot = TRUE`. Created if it doesn't exist. Required in that case.
+#' @param plot_filename Character. File name for the saved scree plot.
+#'   Default `"pca_eigenvalues.png"`.
+#'
+#' @return A list containing `pca_data` (a dataframe with the retained principal
+#'   components, samples as row names) and `pca_summary` (the `summary.prcomp`
+#'   object, useful for inspecting variance explained per component).
+#'
+#' @export
+perform_pca <- function(data, num_components = 30,
+                         save_eig_plot = FALSE, eig_ncp = 15,
+                         output_dir = NULL, plot_filename = "pca_eigenvalues.png") {
+ 
+  print_message("Computing PCA...")
+  pca <- stats::prcomp(data, scale. = TRUE, center = TRUE)
+  max_comp <- min(num_components, ncol(pca$x))
+ 
+  if (save_eig_plot) {
+    if (is.null(output_dir)) stop("output_dir must be provided when save_eig_plot = TRUE")
+    if (!dir.exists(output_dir)) dir.create(output_dir, recursive = TRUE)
+
+  print_message("Saving PCA eigenvalue plot to", file.path(output_dir, plot_filename))
+
+  eig_plot <- factoextra::fviz_eig(pca, ncp = eig_ncp, addlabels = TRUE) +
+    ggplot2::theme(
+      plot.title   = ggplot2::element_text(size = 18),
+      axis.title   = ggplot2::element_text(size = 16),   # nombres de los ejes
+      axis.text    = ggplot2::element_text(size = 14)    # números/etiquetas de los ejes
+    )
+  # Tamaño de los % sobre las barras
+  eig_plot$layers[[length(eig_plot$layers)]]$aes_params$size <- 4.5
+
+  base_name <- file.path(output_dir, sub("\\.[^.]+$", "", plot_filename))  # nombre sin extensión
+
+  ggplot2::ggsave(paste0(base_name, ".svg"), plot = eig_plot,
+                  width = 6, height = 5, device = "pdf")
+
+  ggplot2::ggsave(paste0(base_name, ".jpeg"), plot = eig_plot,
+                  width = 6, height = 5, dpi = 600, quality = 100, bg = "white")
+  }
+ 
+  return(list(
+    pca_data = data.frame(pca$x[, seq_len(max_comp)]),
+    pca_summary = summary(pca)
+  ))
+}
+ 
+
+#' Join PCA Coordinates with Sample Metadata
+#'
+#' @description
+#' Joins the PCA coordinates (as returned in `perform_pca()$pca_data`) with
+#' sample-level phenotypic/metadata, matching by `sample_id`.
+#'
+#' @param pca_data Dataframe. PCA coordinates with samples as row names, as
+#'   returned in `perform_pca()$pca_data`.
+#' @param metadata Dataframe. Sample metadata, must contain a `sample_id` column.
+#'
+#' @return A dataframe with the PCA coordinates joined to the metadata.
+#'
+#' @export
+join_pca_with_metadata <- function(pca_data, metadata) {
+
+  pca_df <- pca_data %>%
+    tibble::rownames_to_column("sample_id") %>%
+    dplyr::inner_join(metadata, by = "sample_id")
+
+  return(pca_df)
+}
+
+## ----------------------------------------------------------------------------------------------------------------------------------------
+
+#' Perform UMAP
+#'
+#' @description
+#' Computes a UMAP embedding on the provided data matrix (samples as rows,
+#' features as columns), scaling it beforehand.
+#'
+#' @param data Matrix or dataframe. Samples as rows, features (e.g. genes) as columns.
+#'
+#' @return A `umap` object, as returned by `umap::umap()`.
+#'
+#' @export
+perform_umap <- function(data) {
+
+  print_message("Computing UMAP...")
+  umap_data <- data %>%
+    base::scale() %>%
+    umap::umap()
+
+  return(umap_data)
+}
+
+#' Join UMAP Coordinates with Sample Metadata
+#'
+#' @description
+#' Extracts the UMAP layout (UMAP1/UMAP2) from a `umap` object (as returned by
+#' `perform_umap()`) and joins it with sample-level phenotypic/metadata,
+#' matching by `sample_id`.
+#'
+#' @param umap_data List. A `umap` object, as returned by `perform_umap()`.
+#' @param metadata Dataframe. Sample metadata, must contain a `sample_id` column.
+#'
+#' @return A dataframe with the UMAP1/UMAP2 coordinates joined to the metadata.
+#'
+#' @export
+join_umap_with_metadata <- function(umap_data, metadata) {
+
+  umap_df <- umap_data$layout %>%
+    as.data.frame()
+  colnames(umap_df) <- c("UMAP1", "UMAP2")
+
+  umap_df <- umap_df %>%
+    tibble::rownames_to_column("sample_id") %>%
+    dplyr::inner_join(metadata, by = "sample_id")
+
+  return(umap_df)
 }

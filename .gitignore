@@ -7,6 +7,7 @@
 .httr-oauth
 .DS_Store
 .quarto
+lib_check/
 
 # Carpetas de datos y resultados
 test/
@@ -34,3 +35,11 @@ docs/
 
 # Binarios
 .mrmr
+
+# instalación dependencias
+*.log
+
+# Analysis script que no queremos subir
+analysis/02.1_ml_training_candidate_laptop.R
+analysis/02.1_ml_training_full_genes_example.R
+analysis/build_supplementary_data.R

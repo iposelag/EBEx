@@ -17,6 +17,8 @@ export(get_enrichment_logical_matrix)
 export(get_enrichment_matrix)
 export(glm_binary_model)
 export(glm_multiclass_model)
+export(join_pca_with_metadata)
+export(join_umap_with_metadata)
 export(knn_model)
 export(load_gene_list)
 export(normalize_shap_values)
@@ -28,7 +30,9 @@ export(obtain_mrmr)
 export(obtain_omnipath_combined)
 export(obtain_omnipath_expansion)
 export(obtain_split_data)
+export(perform_pca)
 export(perform_pheno_test)
+export(perform_umap)
 export(plot_dea_candidates)
 export(plot_density_diagnostic)
 export(plot_enrichment_dotplot)
@@ -56,9 +60,11 @@ export(select_genes_mclust)
 export(svm_p_model)
 export(svm_r_model)
 export(xgb_model)
-importFrom(ComplexHeatmap,Heatmap)
-importFrom(ComplexHeatmap,HeatmapAnnotation)
-importFrom(ComplexHeatmap,draw)
+importFrom(ComplexHeatmap,
+  Heatmap,
+  HeatmapAnnotation,
+  draw
+)
 importFrom(DALEX,predict_parts)
 importFrom(DALEXtra,explain_tidymodels)
 importFrom(OmnipathR,import_all_interactions)
@@ -67,135 +73,176 @@ importFrom(broom,tidy)
 importFrom(bundle,bundle)
 importFrom(circlize,colorRamp2)
 importFrom(dials,finalize)
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_cols)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,case_when)
-importFrom(dplyr,desc)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,rename)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,summarize)
-importFrom(dplyr,ungroup)
+importFrom(dplyr,
+  across,
+  all_of,
+  arrange,
+  bind_cols,
+  bind_rows,
+  case_when,
+  desc,
+  filter,
+  group_by,
+  left_join,
+  mutate,
+  n,
+  rename,
+  select,
+  summarise,
+  summarize,
+  ungroup
+)
 importFrom(enrichR,enrichr)
+importFrom(factoextra,fviz_eig)
 importFrom(fmsb,radarchart)
-importFrom(ggplot2,aes)
-importFrom(ggplot2,element_text)
-importFrom(ggplot2,geom_line)
-importFrom(ggplot2,geom_point)
-importFrom(ggplot2,geom_vline)
-importFrom(ggplot2,ggplot)
-importFrom(ggplot2,ggsave)
-importFrom(ggplot2,labs)
-importFrom(ggplot2,scale_color_gradient)
-importFrom(ggplot2,scale_color_manual)
-importFrom(ggplot2,theme)
-importFrom(ggplot2,theme_bw)
-importFrom(ggplot2,theme_minimal)
-importFrom(grDevices,dev.off)
-importFrom(grDevices,pdf)
-importFrom(grDevices,png)
-importFrom(grDevices,rainbow)
-importFrom(graphics,abline)
-importFrom(graphics,hist)
-importFrom(graphics,par)
-importFrom(graphics,plot)
-importFrom(grid,gpar)
-importFrom(grid,grid.draw)
-importFrom(grid,unit)
+importFrom(ggplot2,
+  aes,
+  element_text,
+  geom_line,
+  geom_point,
+  geom_vline,
+  ggplot,
+  ggsave,
+  labs,
+  scale_color_gradient,
+  scale_color_manual,
+  theme,
+  theme_bw,
+  theme_minimal
+)
+importFrom(grDevices,
+  dev.off,
+  pdf,
+  png,
+  rainbow
+)
+importFrom(graphics,
+  abline,
+  hist,
+  par,
+  plot
+)
+importFrom(grid,
+  gpar,
+  grid.draw,
+  unit
+)
 importFrom(gridExtra,arrangeGrob)
-importFrom(limma,contrasts.fit)
-importFrom(limma,decideTests)
-importFrom(limma,eBayes)
-importFrom(limma,lmFit)
-importFrom(limma,makeContrasts)
-importFrom(limma,plotMD)
-importFrom(limma,topTable)
-importFrom(limma,vennDiagram)
+importFrom(limma,
+  contrasts.fit,
+  decideTests,
+  eBayes,
+  lmFit,
+  makeContrasts,
+  plotMD,
+  topTable,
+  vennDiagram
+)
 importFrom(magrittr,"%>%")
-importFrom(mclust,Mclust)
-importFrom(mclust,mclustBIC)
-importFrom(mclust,mclustICL)
-importFrom(parsnip,boost_tree)
-importFrom(parsnip,fit)
-importFrom(parsnip,logistic_reg)
-importFrom(parsnip,multinom_reg)
-importFrom(parsnip,nearest_neighbor)
-importFrom(parsnip,rand_forest)
-importFrom(parsnip,set_engine)
-importFrom(parsnip,set_mode)
-importFrom(parsnip,svm_poly)
-importFrom(parsnip,svm_rbf)
+importFrom(mclust,
+  Mclust,
+  mclustBIC,
+  mclustICL
+)
+importFrom(parsnip,
+  boost_tree,
+  fit,
+  logistic_reg,
+  multinom_reg,
+  nearest_neighbor,
+  rand_forest,
+  set_engine,
+  set_mode,
+  svm_poly,
+  svm_rbf
+)
 importFrom(proxy,dist)
-importFrom(purrr,imap_dfr)
-importFrom(purrr,map)
-importFrom(purrr,map_dfr)
-importFrom(recipes,all_numeric_predictors)
-importFrom(recipes,all_outcomes)
-importFrom(recipes,all_predictors)
-importFrom(recipes,recipe)
-importFrom(recipes,step_BoxCox)
-importFrom(recipes,step_corr)
-importFrom(recipes,step_normalize)
-importFrom(rlang,"!!")
-importFrom(rlang,.data)
-importFrom(rlang,sym)
-importFrom(rsample,initial_split)
-importFrom(rsample,testing)
-importFrom(rsample,training)
-importFrom(stats,aov)
-importFrom(stats,as.formula)
-importFrom(stats,cor.test)
-importFrom(stats,cutree)
-importFrom(stats,density)
-importFrom(stats,dist)
-importFrom(stats,hclust)
-importFrom(stats,kruskal.test)
-importFrom(stats,ks.test)
-importFrom(stats,model.matrix)
-importFrom(stats,p.adjust)
-importFrom(stats,predict)
-importFrom(stats,qnorm)
-importFrom(stats,reorder)
-importFrom(stats,sd)
-importFrom(stats,shapiro.test)
-importFrom(stats,t.test)
-importFrom(stats,wilcox.test)
+importFrom(purrr,
+  imap_dfr,
+  map,
+  map_dfr
+)
+importFrom(recipes,
+  all_numeric_predictors,
+  all_outcomes,
+  all_predictors,
+  recipe,
+  step_BoxCox,
+  step_corr,
+  step_normalize
+)
+importFrom(rlang,
+  "!!",
+  .data,
+  sym
+)
+importFrom(rsample,
+  initial_split,
+  testing,
+  training
+)
+importFrom(rstatix,
+  kruskal_effsize,
+  wilcox_effsize
+)
+importFrom(stats,
+  aov,
+  as.formula,
+  cor.test,
+  cutree,
+  density,
+  dist,
+  hclust,
+  kruskal.test,
+  ks.test,
+  model.matrix,
+  p.adjust,
+  predict,
+  qnorm,
+  reorder,
+  sd,
+  shapiro.test,
+  t.test,
+  wilcox.test
+)
 importFrom(stringr,str_extract)
 importFrom(themis,step_downsample)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,pivot_wider)
-importFrom(tidyr,unnest)
-importFrom(tune,collect_metrics)
-importFrom(tune,collect_predictions)
-importFrom(tune,conf_mat_resampled)
-importFrom(tune,control_bayes)
-importFrom(tune,extract_parameter_set_dials)
-importFrom(tune,finalize_model)
-importFrom(tune,fit_resamples)
-importFrom(tune,select_best)
-importFrom(tune,tune)
-importFrom(tune,tune_bayes)
-importFrom(utils,read.csv)
-importFrom(utils,read.table)
-importFrom(workflows,add_model)
-importFrom(workflows,add_recipe)
-importFrom(workflows,update_model)
-importFrom(workflows,workflow)
-importFrom(yardstick,accuracy)
-importFrom(yardstick,bal_accuracy)
-importFrom(yardstick,conf_mat)
-importFrom(yardstick,mcc)
-importFrom(yardstick,metric_set)
-importFrom(yardstick,mn_log_loss)
-importFrom(yardstick,precision)
-importFrom(yardstick,roc_auc)
-importFrom(yardstick,sens)
-importFrom(yardstick,spec)
+importFrom(tidyr,
+  pivot_longer,
+  pivot_wider,
+  unnest
+)
+importFrom(tune,
+  collect_metrics,
+  collect_predictions,
+  conf_mat_resampled,
+  control_bayes,
+  extract_parameter_set_dials,
+  finalize_model,
+  fit_resamples,
+  select_best,
+  tune,
+  tune_bayes
+)
+importFrom(utils,
+  read.csv,
+  read.table
+)
+importFrom(workflows,
+  add_model,
+  add_recipe,
+  update_model,
+  workflow
+)
+importFrom(yardstick,
+  accuracy,
+  bal_accuracy,
+  conf_mat,
+  mcc,
+  metric_set,
+  mn_log_loss,
+  precision,
+  roc_auc,
+  sens,
+  spec
+)

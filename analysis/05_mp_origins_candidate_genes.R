@@ -8,9 +8,7 @@
 
 ## --------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(tidyverse)
 library(UpSetR)
 library(grid)

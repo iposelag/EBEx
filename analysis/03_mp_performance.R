@@ -14,11 +14,11 @@ library(dplyr)
 ## ----------------------------------------------------------------------------------------------------------------------------------------
 # 1. CONFIGURATION
 # Parameters
-input_lists <- c("data_driven", "dea", "mrmr", "disease_related",
-                 "disease_related_entire_list", "omnipath_data_driven",
-                 "omnipath_disease_related", "omnipath_intersection",
-                 "guildify_disease_related", "guildify_data_driven",
-                 "omnipath_union")
+# input_lists <- c("data_driven", "dea", "mrmr", "disease_related",
+#                  "disease_related_entire_list", "omnipath_data_driven",
+#                  "omnipath_disease_related", "omnipath_intersection",
+#                  "guildify_disease_related", "guildify_data_driven",
+#                  "omnipath_union")
 input_lists <- c("candidate")
 pname <- "candidate"
 # Define minmax and normMCC for radar charts
@@ -29,7 +29,7 @@ metric <- "normMCC"
 # pname <- "mrmr_comparison"
 ml_models_to_run_vector <- c("rf", "svm_r", "svm_p", "glm", "knn", "xgb")
 # Relative paths
-models_results_dir <- "/home/iria/bsc008817/COPD/COPD/COPD"
+# models_results_dir <- "/home/iria/bsc008817/COPD/COPD_backup/data_2025"
 models_results_dir <- "test"
 expression_dir <- "test/analysis/preprocessing"
 features_lists_dir <- "test/feature_selection"

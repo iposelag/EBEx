@@ -477,7 +477,9 @@ ML_models <- function(data, target_var, models_to_run = c("rf", "svm_r", "svm_p"
     save_helper_rda(expression_folds, "expression_folds", "folds_object.Rda", directory_to_save, "ML_models")
   }
   # 3. Set control parameters for Bayesian tuning
-  ctrl_bayes <- tune::control_bayes(no_improve = 15, verbose = verbose, save_pred = TRUE, save_workflow = TRUE, seed = 1234)
+  # save_pred / save_workflow = FALSE: no se guardan las predicciones por resample ni el workflow
+  # en el resultado de fit_resamples (reduce memoria y tamaño de los .Rda; las métricas no cambian)
+  ctrl_bayes <- tune::control_bayes(no_improve = 15, verbose = verbose, save_pred = FALSE, save_workflow = FALSE, seed = 1234)
   results <- list()
   # 4. Run the specified models and collect results
   if ("rf" %in% models_to_run) {

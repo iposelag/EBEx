@@ -7,10 +7,7 @@
 
 ## --------------------------------------------------------------------------------------------------------------------
 # 0. Setup & libraries
-library(devtools)
-devtools::load_all()
-devtools::document()
-library(MyPipelinePkg)
+library(EBEx)
 library(tibble)
 library(ComplexHeatmap)
 
@@ -68,7 +65,7 @@ default_colors <- colorRamp2(seq(min(heatmap_matrix), max(heatmap_matrix), lengt
 print_message("Preparing phenotypic data for annotation...")
 # Filter and clean phenotypes
 annotation_data <- phenotypic_ctics %>%
-  dplyr::select(dis_condition, sex, smoker, age, emphysema, pred_dlco, GOLD_stage, pred_fev_postbd, pred_fvc_postbd) %>%
+  dplyr::select(dis_condition, GOLD_stage, sex, smoker, age, emphysema, pred_dlco, pred_fev_postbd, pred_fvc_postbd) %>%
 #   dplyr::filter(dis_condition == "COPD") %>%
   dplyr::mutate(
     across(c(sex, smoker, GOLD_stage), as.factor),
@@ -95,7 +92,7 @@ print_message("________________________________")
 # 4. Run enrichment analysis
 print_message("Running enrichment analysis for clusters vs phenotypes...")
 enrich_cl <- run_cluster_enrichment(cl_res$clusters, annotation_data)
-filtered_results <- enrich_cl[enrich_cl$p_value < 0.05, ]
+filtered_results <- enrich_cl[enrich_cl$p_adj < 0.05, ]
 save_helper_csv(filtered_results, paste0("enrichment_results_clusters_vs_phenotypes_", heatmap_data, ".csv"), subgroups_dir)
 print_message("________________________________")
 
@@ -135,10 +132,12 @@ ha <- HeatmapAnnotation(
     'predicted FVC' = col_pred_fvc_postbd
   ),
   annotation_name_side = "left",
-  simple_anno_size = unit(2, "mm"),
-  annotation_name_gp= gpar(fontsize = 8),
-  annotation_legend_param = list(labels_gp = gpar(fontsize = 8),
-                                 title_gp = gpar(fontsize = 9))
+  simple_anno_size = unit(4, "mm"),
+  gap = unit(0.5, "mm"),                     # pequeña separación entre pistas
+  na_col = "grey80",                         # explícito, para que coincida con la leyenda
+  annotation_name_gp= gpar(fontsize = 10),
+  annotation_legend_param = list(labels_gp = gpar(fontsize = 9),
+                                 title_gp = gpar(fontsize = 10, fontface = "bold"))
 )
 # 5.3 Heatmap
 p1 <- Heatmap(
@@ -148,21 +147,33 @@ p1 <- Heatmap(
   col = default_colors,
   cluster_columns = cl_res$hclust,  # Pass the precomputed clustering
   column_split = 5,  # Optional: split columns into 5 clusters
+  gap = unit(0.5, "mm"),                     # pequeña separación entre pistas
   row_split = 3,
   row_names_gp = gpar(fontsize = 3.8),
-  show_column_names = TRUE,
+  column_dend_height = unit(10, "mm"),   # dendrograma más bajo
+  show_column_names = FALSE,
   column_names_gp = gpar(fontsize = 5), # Ajusta el tamaño aquí (por ejemplo, 5)
   top_annotation = ha,
   heatmap_legend_param = list(
     labels_gp = gpar(fontsize = 9),
-    title_gp = gpar(fontsize = 9)
+    title_gp = gpar(fontsize = 10, fontface = "bold")
   )
 )
+lgd_na <- Legend(labels = "Missing", title = "NA",
+                 legend_gp = gpar(fill = "grey80"),
+                 labels_gp = gpar(fontsize = 9),
+                 title_gp = gpar(fontsize = 10, fontface = "bold"))
+
 # Open a PDF device
 pdf(file.path(output_dir, paste0("subgroups_heatmap_euclidean_", heatmap_data, ".pdf")), width = 14, height = 14) # Adjust width and height as needed
 # Draw the heatmap
-draw(p1)
+draw(p1, annotation_legend_list = list(lgd_na))
 # Close the device
+dev.off()
+# PNG
+png(file.path(output_dir, paste0("subgroups_heatmap_euclidean_", heatmap_data, ".png")),
+    width = 14, height = 14, units = "in", res = 500)
+draw(p1, annotation_legend_list = list(lgd_na))
 dev.off()
 
 ## --------------------------------------------------------------------------------------------------------------------
